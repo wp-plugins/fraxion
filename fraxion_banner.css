@@ -1,0 +1,10 @@
+<style type='text/css'>
+.fraxion_banner { border: solid 1px #AAA; background-color:#EEF; color:#666; padding: 6px; margin-bottom:10px;}
+.fraxion_banner h3 { margin: 4px; padding: 2px; color:#036;}
+.fraxion_banner_image { float: left; padding-left:6px;}
+.fraxion_banner_status { float: left; padding-left:6px;}
+.fraxion_banner_action { clear:both; padding-left:6px;}
+.fraxion_banner p { margin: 0px; padding: 0px; line-height: 4px;}
+.unlock { float:left; color:red;}
+.purchase { float:right; color:green;}
+</style>
