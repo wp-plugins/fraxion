@@ -1,5 +1,5 @@
 <?php
-// Version: 0.4.3
+// Version: 0.4.4
 
 class FraxionPayments {
 	public static $site_ID;
@@ -185,7 +185,7 @@ class FraxionPayments {
 				$admin_site_settings_panel .= '<hr />';
 				$admin_site_settings_panel .= '<form name="form1" method="post" action=""><input type="hidden" name="fraxion_settings_update" value="Y" />
 																<!--Site ID: <input type="text" name="fraxion_site_id" value="' . get_option('fraxion_site_id') . '" size="20" /></p>-->
-																<p class="submit"><input type="submit" name="Submit" value="Update Fraxion Settings" /></p>
+																<p class="submit"><!-- input type="submit" name="Submit" value="Update Fraxion Settings" / --></p>
 																</form><hr />';			
 				}
 			else {
