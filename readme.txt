@@ -4,7 +4,7 @@ Tags: micropayments, online journalism, citizen journalism, paid content, blogge
 newspaper, digital news
 Requires at least: 2.8.4
 Tested up to: 2.9.2
-Stable tag: 0.4.4
+Stable tag: 0.4.5
 
 "Micropayments for bloggers. You can sell your articles for as little as 1c. You set the price and readers "unlock" articles with one click.
 
@@ -59,6 +59,10 @@ We don't believe in it. What we believe in is "fair exchange". http://www.fraxio
 
 == Changelog ==
 
+= 0.4.5 =
+
+Included register site button in fraxion edit widget.
+
 = 0.4.4 =
 
 Remove faulty admin button. Replace later.
@@ -68,6 +72,10 @@ Remove faulty admin button. Replace later.
 The first release. We think most bugs have been solved. But of course please let us know if you find any.
 
 == Upgrade Notice ==
+
+= 0.4.5 =
+
+Made registering a site with Fraxion Payments easier by placing a register button in the edit page when needed.
 
 = 0.4.4 =
 

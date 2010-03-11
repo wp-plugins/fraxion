@@ -1,5 +1,5 @@
 <?php
-// Version: 0.4.4
+// Version: 0.4.5
 
 class FraxionPayments {
 	public static $site_ID;
@@ -205,6 +205,8 @@ class FraxionPayments {
 			$status_message;
 			global $user_ID;
 			get_currentuserinfo();
+			$settings = json_decode(str_replace('\n', null, file_get_contents('../wp-content/plugins/fraxion/settings.json')), TRUE);
+			self::$urls = $settings['urls'];
 			self::$site_ID = get_option('fraxion_site_id');
 			if(self::$site_ID != '') {
 				$article_ID = '';
@@ -214,8 +216,6 @@ class FraxionPayments {
 					else { $article_ID = $post_ID->ID; }
 					$post_title = $post_ID->post_title;
 					//echo 'art ID: ' . $article_ID;
-					$settings = json_decode(str_replace('\n', null, file_get_contents('../wp-content/plugins/fraxion/settings.json')), TRUE);
-					self::$urls = $settings['urls'];
 					$cFraxion = curl_init();
 					curl_setopt($cFraxion, CURLOPT_URL, self::$urls['settings'].'?confid=0&sid=' . self::$site_ID . '&aid=' . $article_ID . '&uid_wp=' . $user_ID);
 					curl_setopt($cFraxion,CURLOPT_RETURNTRANSFER, true);
@@ -292,7 +292,8 @@ class FraxionPayments {
 					}
 				}
 			else {
-				echo '<span style="color:red;">Site not registered!!!</span>';
+				//echo '<span style="color:red;">Site not registered!!!</span>';
+				echo '<span style="color:red;"><a href="'. self::$urls['register'] . '?uid_wp=' . $user_ID . '&btitle=' . urlencode(get_option('blogname')) .'&burl=' . urlencode(get_option('home')) . '&returl=http' . ($_SERVER['HTTPS']?'s':null) . urlencode('://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']) . '&vurl=' . urlencode(get_option('home')) . '/wp-content/plugins/fraxion/set_site_id.php">Register your Site</a></span>';	
 			}
 			}
 	////////
