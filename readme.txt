@@ -101,3 +101,4 @@ These sites use the Fraxion Payments plug-in Check them out if you want to see t
 
 1. http://www.casualravings.com
 2. http://www.malenyphilosopher.com/wordpress/
+3. http://www.swordandrifle.com/
