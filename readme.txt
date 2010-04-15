@@ -60,7 +60,7 @@ We don't believe in it. What we believe in is "fair exchange". http://www.fraxio
 == Changelog ==
 = 0.4.9 =
 
-Fix bug with pretty links introduced with 0.4.8.
+Fix bug with pretty links introduced with 0.4.8. Should wark with all settings now.
 
 = 0.4.8 =
 
