@@ -59,6 +59,10 @@ We don't believe in it. What we believe in is "fair exchange". http://www.fraxio
 
 == Changelog ==
 
+= 0.4.8 =
+
+Fix one more bug with pretty links where relative URLs get the wrong path.
+
 = 0.4.7 =
 
 Fixed bug with pretty links that caused banner and login problems.
@@ -77,6 +81,10 @@ Remove faulty admin button. Replace later.
 The first release. We think most bugs have been solved. But of course please let us know if you find any.
 
 == Upgrade Notice ==
+
+= 0.4.8 =
+
+Fixes one more bug with pretty links where relative URLs get the wrong path.
 
 = 0.4.7 =
 
