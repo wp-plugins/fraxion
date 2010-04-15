@@ -1,7 +1,8 @@
 <?php
-// Version: 0.4.6
+// Version: 0.4.7
 
 class FraxionPayments {
+	public static $version = "0.4.7";
 	public static $site_ID;
 	public static $urls;
 	public static $fp_post_status;
@@ -116,6 +117,7 @@ class FraxionPayments {
 			$banner = str_replace('{postID}',get_the_ID(),$banner);
 			$banner = str_replace('{status_message}',$status_message,$banner);
 			$banner = str_replace('{debug_message}',$debug_message,$banner);
+			$banner = str_replace('{version}',self::$version,$banner);
 			return $banner;
 		}
 	///////
@@ -156,7 +158,7 @@ class FraxionPayments {
 		}
 	///////
 		public static function admin_TagButton() {
-			echo '<script language="javascript" type="text/javascript">jQuery(document).ready(function() {if(jQuery("#post").html()!="") {jQuery("#ed_toolbar").append("<input type=\'button\' class=\'ed_button\' onclick=\'fppos=0;contents=\"\";fppos=document.getElementById(\"content\").selectionStart;contents=getElementById(\"content\").value;getElementById(\"content\").innerHTML=contents.substring(0,fppos)+\"' . self::$the_tag . '\"+contents.substring(fppos);\' title=\'Insert Fraxion lock tag\' value=\'fraxion\' />");}});</script>';
+			echo '<script language="javascript" type="text/javascript">jQuery(document).ready(function() {if(jQuery("#post").html()!="") {jQuery("#ed_toolbar").append("<input type=\'button\' class=\'ed_button\' onclick=\'fppos=0;contents=\"\";fppos=document.getElementById(\"content\").selectionStart;contents=getElementById(\"content\").value;getElementById(\"content\").value=contents.substring(0,fppos)+\"' . self::$the_tag . '\"+contents.substring(fppos);\' title=\'Insert Fraxion lock tag\' value=\'fraxion\' />");}});</script>';
 			}
 	///////
 		public static function admin_Menu() {

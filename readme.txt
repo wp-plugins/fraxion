@@ -4,7 +4,7 @@ Tags: micropayments, online journalism, citizen journalism, paid content, blogge
 newspaper, digital news
 Requires at least: 2.8.4
 Tested up to: 2.9.2
-Stable tag: 0.4.6
+Stable tag: 0.4.7
 
 "Micropayments for bloggers. You can sell your articles for as little as 1c. You set the price and readers "unlock" articles with one click.
 
@@ -59,14 +59,14 @@ We don't believe in it. What we believe in is "fair exchange". http://www.fraxio
 
 == Changelog ==
 
+= 0.4.7 =
+
+Fixed bug with pretty links that caused banner and login problems.
+Fixed the "Fraxion" button, bug prevented it from inserting the lock tag intermittently.
 
 = 0.4.6 =
 
 Repair some script bugs that interfered with wordpress login.
-
-= 0.4.5 =
-
-Skipped this one.
 
 = 0.4.4 =
 
@@ -81,10 +81,6 @@ The first release. We think most bugs have been solved. But of course please let
 = 0.4.6 =
 
 Removes a bug that could put off users.
-
-= 0.4.5 =
-
-Skipped this one.
 
 = 0.4.4 =
 

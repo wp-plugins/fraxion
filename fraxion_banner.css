@@ -7,4 +7,5 @@
 .fraxion_banner p { margin: 0px; padding: 0px; line-height: 4px;}
 .unlock { float:left; color:red;}
 .purchase { float:right; color:green;}
+.version { clear:both; font-size:80%; float:right;}
 </style>
