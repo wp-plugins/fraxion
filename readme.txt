@@ -78,6 +78,11 @@ The first release. We think most bugs have been solved. But of course please let
 
 == Upgrade Notice ==
 
+= 0.4.7 =
+
+Fixes a bug with pretty links that caused banner and login problems.
+Fixes the "Fraxion" button, an intermittent bug prevented it from inserting the lock tag when pressed.
+
 = 0.4.6 =
 
 Removes a bug that could put off users.
