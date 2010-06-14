@@ -1,12 +1,11 @@
 === Fraxion Payments Micropayments ===
 Contributors:  GarryCL, DanDare2050, Chris Wilkins
-Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news,  
-newspaper, digital news
+Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news, newspaper, digital news
 Requires at least: 2.8.4
 Tested up to: 2.9.2
-Stable tag: 0.4.9
+Stable tag: 0.5.0
 
-"Micropayments for bloggers. You can sell your articles for as little as 1c. You set the price and readers "unlock" articles with one click.
+"Micropayments for bloggers". You can sell your articles for as little as 1c. You set the price and readers "unlock" articles with one click.
 
 == Description ==
 
@@ -14,9 +13,11 @@ This extremely simple plug-in immediately makes "micropayments for bloggers a re
 
 And readers can unlock these articles with one-click, exchanging a small number of cents for quality content.
 
-This basically makes it incredibly easy for authors to charge for their content in a way that is easy, convenient and priced fairly for their readers.
+This makes it incredibly easy for authors to charge for their content in a way that is easy, convenient and priced fairly for their readers.
 
 A great plug-in for journalists, bloggers and writers who want to turn their creativity into an income.
+
+Now MU compatible.
 
 
 == Installation ==
@@ -35,7 +36,6 @@ For video on how to use go to http://www.fraxionpayments.com/?page_id=166
 They are basically very small amounts you pay for online content. By actually paying for this content the quality is naturally going to be better than free content.
 
 Of course this forms one part of the ongoing debate of "free" vs "paid" content, made prominent by people such as Rupert Murdoch and newspapers as the New York Times.
-
 
 = Where does this technology come from? =
 
@@ -58,9 +58,16 @@ We don't believe in it. What we believe in is "fair exchange". http://www.fraxio
 
 
 == Changelog ==
+= 0.5.2 =
+
+Wordpress MU compatible. Tracks which sites belong to a MU network and which is the base site.
+Adds information to the lock banners to help readers know what is involved with unlocking an article.
+Slightly more signposting around admin functions.
+Fixed a bug that caused the titles of articles to be null in the Fraxion Payments database.
+
 = 0.4.9 =
 
-Fix bug with pretty links introduced with 0.4.8. Should wark with all settings now.
+Fix bug with pretty links introduced with 0.4.8.
 
 = 0.4.8 =
 
@@ -84,6 +91,13 @@ Remove faulty admin button. Replace later.
 The first release. We think most bugs have been solved. But of course please let us know if you find any.
 
 == Upgrade Notice ==
+
+= 0.5.2 =
+
+Increases take up by readers by adding information to the lock banners to help readers know what is involved with unlocking an article.
+Slightly more signposting
+Fixed a bug that caused the titles of articles to be null in the Fraxion Payments database.
+Wordpress MU compatible allowing Fraxion Payments to know which is a MU base site and which are other sites in its network.
 
 = 0.4.9 =
 
@@ -114,6 +128,8 @@ Nothing to upgrade to at the moment.
 
 These sites use the Fraxion Payments plug-in Check them out if you want to see the plug-in in action.
 
-1. http://www.casualravings.com
-2. http://www.malenyphilosopher.com/wordpress/
+1. http://www.kwikreads.com
+2. http://www.casualravings.com
 3. http://www.swordandrifle.com/
+4. http://www.swordandrifle.com/
+5. http://www.inspirationalchristianebooksnblog.net
