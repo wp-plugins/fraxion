@@ -3,7 +3,7 @@ Contributors:  GarryCL, DanDare2050, Chris Wilkins
 Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news, newspaper, digital news
 Requires at least: 2.8.4
 Tested up to: 2.9.2
-Stable tag: 0.5.2
+Stable tag: 0.5.4
 
 "Micropayments for bloggers". You can sell your articles for as little as 1c. You set the price and readers "unlock" articles with one click.
 
@@ -16,8 +16,6 @@ And readers can unlock these articles with one-click, exchanging a small number 
 This makes it incredibly easy for authors to charge for their content in a way that is easy, convenient and priced fairly for their readers.
 
 A great plug-in for journalists, bloggers and writers who want to turn their creativity into an income.
-
-Now MU compatible.
 
 
 == Installation ==
@@ -58,6 +56,16 @@ We don't believe in it. What we believe in is "fair exchange". http://www.fraxio
 
 
 == Changelog ==
+= 0.5.4 =
+
+Resolved conflicts with some themes.
+Added a "Register" button to register to the wordpress site when not logged in to the site.
+Added progressive user help to lead new readers through the process.
+Admins may see more sales history at fraxion site.
+Comming soon
+Remove the need for readers to be logged in at the word press site
+Site Admin may view accounts - income, margin and balance, for their sites
+
 = 0.5.2 =
 
 Wordpress MU compatible. Tracks which sites belong to a MU network and which is the base site.
@@ -91,6 +99,11 @@ Remove faulty admin button. Replace later.
 The first release. We think most bugs have been solved. But of course please let us know if you find any.
 
 == Upgrade Notice ==
+= 0.5.4 =
+
+Resolved conflicts with some themes.
+Added a "Register" button to register to the wordpress site when not logged in to the site.
+Added progressive user help to lead new readers through the process.
 
 = 0.5.2 =
 
@@ -130,6 +143,5 @@ These sites use the Fraxion Payments plug-in Check them out if you want to see t
 
 1. http://www.kwikreads.com
 2. http://www.casualravings.com
-3. http://www.swordandrifle.com/
-4. http://www.swordandrifle.com/
-5. http://www.inspirationalchristianebooksnblog.net
+3. http://www.swordandrifle.com
+4. http://www.inspirationalchristianebooksnblog.net

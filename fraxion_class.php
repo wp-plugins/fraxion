@@ -1,8 +1,8 @@
 <?php
-// Version: 0.5.2 dev
+// Version: 0.5.4
 
 class FraxionPayments {
-	public static $version = "0.5.2";
+	public static $version = "0.5.4";
 	public static $site_ID;
 	public static $urls;
 	public static $fp_post_status;
@@ -52,7 +52,14 @@ class FraxionPayments {
 						if($reply->item(0)->hasAttribute('lock') && $reply->item(0)->getAttribute('lock') == 'true') {
 							self::$fp_post_status = "locked";
 							if($user_ID == '') {
-								$action = $actions['loginWP'];
+								$canRegister = false;
+								if (function_exists('get_blog_option')) {
+									$canRegister = get_blog_option(self::$blog_id,'users_can_register');
+									}
+								else {
+									$canRegister = get_option('users_can_register');
+									}
+								$action = ($canRegister?$actions['registerWP']:'') . $actions['loginWP'];
 								$costUSD = ($reply->item(0)->getAttribute('cost')<100?$reply->item(0)->getAttribute('cost') . ' cents (USD)':'$' . number_format(($reply->item(0)->getAttribute('cost')/100),2) . ' (USD)');
 								$status_message = str_replace(array('{site_url}','{cost}'), array(self::$site_url, $costUSD), $status_messages['loginWP']);
 								}
@@ -94,9 +101,9 @@ class FraxionPayments {
 				$real_chars = array('"','"',"'");
 				$fraxion_content = str_replace($ms_chars,$real_chars,$fraxion_content);
 				$fraxion_content_full = "<div id='fraxion_post_content_" . get_the_ID() . "'><p>$fraxion_content</p>" . self::showBanner($status_message,$action) . '</div>';
-				echo $fraxion_content_full;}
+				return $fraxion_content_full;}
 			else {
-				echo $fraxion_content;}
+				return $fraxion_content;}
 		}
 	/////
 		public static function showBanner($status_message,$action,$debug_message='') {
