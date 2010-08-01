@@ -1,8 +1,8 @@
 <?php
-// Version: 0.5.4
+// Version: 0.5.5
 
 class FraxionPayments {
-	public static $version = "0.5.4";
+	public static $version = "0.5.5";
 	public static $site_ID;
 	public static $urls;
 	public static $fp_post_status;

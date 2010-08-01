@@ -56,6 +56,10 @@ We don't believe in it. What we believe in is "fair exchange". http://www.fraxio
 
 
 == Changelog ==
+= 0.5.5 =
+
+Fixed bug with links to online test version of Fraxion Payments.
+
 = 0.5.4 =
 
 Resolved conflicts with some themes.
@@ -65,6 +69,8 @@ Admins may see more sales history at fraxion site.
 Comming soon
 Remove the need for readers to be logged in at the word press site
 Site Admin may view accounts - income, margin and balance, for their sites
+
+Bug: Links to test site of fraxion payments cause problems. Switch to version 0.5.5
 
 = 0.5.2 =
 
@@ -99,6 +105,10 @@ Remove faulty admin button. Replace later.
 The first release. We think most bugs have been solved. But of course please let us know if you find any.
 
 == Upgrade Notice ==
+= 0.5.5 =
+
+Fixed bug with links to online test version of Fraxion Payments. If you are using 0.5.4 upgrade immediately.
+
 = 0.5.4 =
 
 Resolved conflicts with some themes.

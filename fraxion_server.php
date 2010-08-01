@@ -1,5 +1,5 @@
 <?php
-// Version: 0.5.4
+// Version: 0.5.5
 include("fraxion_class.php");
 $message = "";
 $action_method = $_POST['action'];
