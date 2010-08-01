@@ -3,7 +3,7 @@ Contributors:  GarryCL, DanDare2050, Chris Wilkins
 Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news, newspaper, digital news
 Requires at least: 2.8.4
 Tested up to: 2.9.2
-Stable tag: 0.5.4
+Stable tag: 0.5.5
 
 "Micropayments for bloggers". You can sell your articles for as little as 1c. You set the price and readers "unlock" articles with one click.
 
