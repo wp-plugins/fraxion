@@ -58,7 +58,7 @@ We don't believe in it. What we believe in is "fair exchange". http://www.fraxio
 == Changelog ==
 = 0.5.5 =
 
-Fixed bug with links to online test version of Fraxion Payments.
+Fixed bug with links to online test version of Fraxion Payments. 0.5.4 is broken.
 
 = 0.5.4 =
 
