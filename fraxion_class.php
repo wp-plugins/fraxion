@@ -1,8 +1,8 @@
 <?php
-// Version: 1.0.0
+// Version: 1.0.1
 
-class FraxionPaymentsLC {
-	private $version = '1.0.0';
+class FraxionPayments {
+	private $version = '1.0.1';
 	public $site_ID;
 	private $urls;
 	private $fp_post_status = 'unlocked';
@@ -212,10 +212,10 @@ class FraxionPaymentsLC {
 			}
 	///////
 		public function admin_Menu() {
-			  add_options_page('Fraxion Settings', 'Fraxion Settings', 'administrator', 'fpsiteoptions', array('FraxionPayments','admin_Settings'));
+			  add_options_page('Fraxion Settings', 'Fraxion Settings', 'administrator', 'fpsiteoptions', array($this,'admin_Settings'));
 			}
 	////////
-		private function admin_Settings() {
+		public function admin_Settings() {
 			global $user_ID;
 			get_currentuserinfo();
 			$settings = json_decode(str_replace('\n', null, file_get_contents(plugins_url('fraxion') . '/settings.json')), TRUE);
@@ -284,12 +284,12 @@ class FraxionPaymentsLC {
 			echo $admin_site_settings_panel;
 			}
 	////////
-		private function admin_Post() {
-			add_meta_box('frax_post_admin','Fraxion Payments',array('FraxionPayments','admin_PostPanel'),'post','side','high');
-			add_meta_box('frax_post_admin','Fraxion Payments',array('FraxionPayments','admin_PostPanel'),'page','side','high');
+		public function admin_Post() {
+			add_meta_box('frax_post_admin','Fraxion Payments',array($this,'admin_PostPanel'),'post','side','high');
+			add_meta_box('frax_post_admin','Fraxion Payments',array($this,'admin_PostPanel'),'page','side','high');
 			}
 	///////
-		private function admin_PostPanel($post_ID) {
+		public function admin_PostPanel($post_ID) {
 			$fraxions_cost = 0;
 			$status_message;
 			global $user_ID;
@@ -392,7 +392,7 @@ class FraxionPaymentsLC {
 			}
 			}
 	////////
-		private function refreshPostPanel() {
+		public function refreshPostPanel() {
 				$settings = json_decode(str_replace('\n', null, file_get_contents('settings.json')), TRUE);
 				$this->urls = $settings['urls'];
 				$locked='false';
@@ -439,7 +439,7 @@ class FraxionPaymentsLC {
 				return json_encode($fraxion_details);
 		}
 	//////	/
-		private function admin_PostValidatePermit_JS($post_ID) {
+		public function admin_PostValidatePermit_JS($post_ID) {
 			global $user_ID;
 			get_currentuserinfo();
 			$this->site_ID = get_option('fraxion_site_id');
@@ -464,7 +464,7 @@ class FraxionPaymentsLC {
 			//}
 		}
 	//////	
-		private function admin_PostValidatePermit() {
+		public function admin_PostValidatePermit() {
 			$settings = json_decode(str_replace('\n', null, file_get_contents('settings.json')), TRUE);
 			$this->urls = $settings['urls'];
 			$cFraxion = curl_init();
@@ -501,7 +501,7 @@ class FraxionPaymentsLC {
 			}
 		}
 	///////////////
-		private function checkPostDetails($site_ID,$article_ID,$user_ID) {
+		public function checkPostDetails($site_ID,$article_ID,$user_ID) {
 			$status_message = '';
 			$settings = json_decode(str_replace('\n', null, file_get_contents('settings.json')), TRUE);
 			$url = '';

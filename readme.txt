@@ -56,6 +56,10 @@ It can only help. With 31,000 journalist laid off in the USA alone over the last
 
 
 == Changelog ==
+
+= 1.0.1 =
+Changed some class functions from private to public to allow proper admin call back. This interfered with some admin functions.
+
 = 1.0.0 =
 
 This new version of the plugin no longer requires readers of articles to be logged in to word press to do an unlock. That means readers only have to login to Fraxion Payments once and may move from web site to web site unlocking articles as they wish.
@@ -109,6 +113,11 @@ Remove faulty admin button. Replace later.
 The first release. We think most bugs have been solved. But of course please let us know if you find any.
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+
+Fixed a bug that would prevent admin of posts and fraxion payments settings.
+
 = 1.0.0 =
 
 This new version of the plugin no longer requires readers of articles to be logged in to word press to do an unlock. That means readers only have to login to Fraxion Payments once and may move from web site to web site unlocking articles as they wish.
