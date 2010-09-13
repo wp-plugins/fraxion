@@ -3,7 +3,7 @@ Contributors:  GarryCL, DanDare2050, Chris Wilkins
 Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news, newspaper, digital news, books, short stories
 Requires at least: 2.8.4
 Tested up to: 3.0.1
-Stable tag: 1.0.0
+Stable tag: 1.0.2
 
 "Micropayments for bloggers". You can sell your articles or short stories for as little as 1c. You set the price and readers "unlock" articles with one click.
 
@@ -56,6 +56,11 @@ It can only help. With 31,000 journalist laid off in the USA alone over the last
 
 
 == Changelog ==
+
+= 1.0.2 =
+Fixed a bug that interfered with content display using I.E., Safari and Chrome on Windows OS with some themes.
+Removed a javascript function that was being interfered with by other plugins and replaced it with markup produced by the server
+when the page is generated.
 
 = 1.0.1 =
 Changed some class functions from private to public to allow proper admin call back. This interfered with some admin functions.
@@ -114,6 +119,12 @@ The first release. We think most bugs have been solved. But of course please let
 
 == Upgrade Notice ==
 
+= 1.0.2 =
+If your locked articles display only headings in some circumstances or the links to unlock are not working you need this version.
+Fixed a bug that interfered with content display using I.E., Safari and Chrome on Windows OS with some themes.
+Removed a javascript function that was being interfered with by other plugins and replaced it with markup produced by the server
+when the page is generated.
+
 = 1.0.1 =
 
 Fixed a bug that would prevent admin of posts and fraxion payments settings.
@@ -168,7 +179,7 @@ Nothing to upgrade to at the moment.
 
 These are some sites that use the Fraxion Payments plug-in. Check them out if you want to see the plug-in in action.
 
-1. http://www.kwikreads.com
-2. http://www.casualravings.com
-3. http://www.swordandrifle.com
-4. http://www.inspirationalchristianebooksnblog.net
+1. http://www.kwikreads.com	- Short stories by various authors
+2. http://www.casualravings.com - Chris Wilkins' blog
+3. http://www.swordandrifle.com - Military history magazine associated with http://www.towergames.com
+4. http://www.garunawebdesigner.com - How to do lots of stuff with web sites

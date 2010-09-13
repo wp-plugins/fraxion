@@ -1,16 +1,18 @@
 <!--<script language="javascript" type="text/javascript" src="wp-includes/js/jquery/jquery.js"></script>-->
 <script language="javascript" type="text/javascript">
-		   function showRespond(status) {
-				if(status=='locked') {
-					document.getElementById("respond").innerHTML = "To leave comments please unlock this post.";}
-				else { document.getElementById("respond").style.display = block;};
-				}
-				
-// Extended Tooltip Javascript
-// copyright 9th August 2002, 3rd July 2005, 24th August 2008
-// by Stephen Chapman, Felgall Pty Ltd
-
-// permission is granted to use this javascript provided that the below code is not altered
-function pw() {return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth}; function mouseX(evt) {return evt.clientX ? evt.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft) : evt.pageX;} function mouseY(evt) {return evt.clientY ? evt.clientY + (document.documentElement.scrollTop || document.body.scrollTop) : evt.pageY} function popUp(evt,oi) {if (document.getElementById) {var wp = pw(); dm = document.getElementById(oi); ds = dm.style; st = ds.visibility; if (dm.offsetWidth) ew = dm.offsetWidth; else if (dm.clip.width) ew = dm.clip.width; if (st == "visible" || st == "show") { ds.visibility = "hidden"; } else {tv = mouseY(evt) + 20; lv = mouseX(evt) - (ew/4); if (lv < 2) lv = 2; else if (lv + ew > wp) lv -= ew/2; lv += 'px';tv += 'px';  ds.left = lv; ds.top = tv; ds.visibility = "visible";}}}
-                  
+	function showRespond(status) {
+		if(status=='locked' && document.getElementById("commentform")) {
+			var message = document.getElementById("commentform");
+			do message = message.previousSibling;
+			while (message && message.nodeType != 1);
+			message.innerHTML = "To leave comments please unlock this post.";
+			document.getElementById("commentform").innerHTML = "";
+			}
+		}
+	window.onload = function() { showRespond(sShowRespond); }
+	// Extended Tooltip Javascript
+	// copyright 9th August 2002, 3rd July 2005, 24th August 2008
+	// by Stephen Chapman, Felgall Pty Ltd
+	// permission is granted to use this javascript provided that the below code is not altered
+	function pw() {return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth}; function mouseX(evt) {return evt.clientX ? evt.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft) : evt.pageX;} function mouseY(evt) {return evt.clientY ? evt.clientY + (document.documentElement.scrollTop || document.body.scrollTop) : evt.pageY} function popUp(evt,oi) {if (document.getElementById) {var wp = pw(); dm = document.getElementById(oi); ds = dm.style; st = ds.visibility; if (dm.offsetWidth) ew = dm.offsetWidth; else if (dm.clip.width) ew = dm.clip.width; if (st == "visible" || st == "show") { ds.visibility = "hidden"; } else {tv = mouseY(evt) + 20; lv = mouseX(evt) - (ew/4); if (lv < 2) lv = 2; else if (lv + ew > wp) lv -= ew/2; lv += 'px';tv += 'px';  ds.left = lv; ds.top = tv; ds.visibility = "visible";}}}
 </script>
