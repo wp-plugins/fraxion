@@ -1,10 +1,12 @@
 <?php
-// Version: 1.0.2
 
 class FraxionPayments {
-	private $version = '1.0.2';
+	private $version = '1.1.0';
 	public $site_ID;
+	public $plugins_path;
 	private $urls;
+	private $actions;
+	private $params;
 	private $fp_post_status = 'unlocked';
 	private $the_tag = '[frax09alpha]';
 	private $site_url;
@@ -13,24 +15,42 @@ class FraxionPayments {
 	private $requested_url;
 	
 	//////////////////
-public function getFraxionService($uriID,$params) {
-		if(empty($this->urls)) {
-			if(function_exists('plugins_url')) { $plugins_url = plugins_url('fraxion') . '/'; } else { $plugins_url = ''; }
-			$settings = json_decode(str_replace('\n', null, file_get_contents($plugins_url . 'settings.json')), TRUE);
-			$this->urls = $settings['urls'];
+	public function __construct() {
+		if(function_exists('plugins_url') && get_option('fraxion_site_id') != false) {	
+			$this->site_ID = get_option('fraxion_site_id');
+			$plugins_url = plugins_url('fraxion');
+			$plugins_url_parts = parse_url($plugins_url);
+			$this->plugins_path = $_SERVER['DOCUMENT_ROOT'] . $plugins_url_parts['path'] . '/';
 			}
-		$cFraxion = curl_init();
-		curl_setopt($cFraxion, CURLOPT_URL, $this->urls[$uriID] . '?confid=0&' . http_build_query($params));
-		curl_setopt($cFraxion,CURLOPT_RETURNTRANSFER, true);
-		$frax_doc = curl_exec($cFraxion);
-		curl_close($cFraxion);
-		if(strpos($frax_doc,'xml') === false) {
-			$frax_reply = $frax_doc;}
 		else {
-			$frax_reply = DOMDocument::loadXML($frax_doc);}
-		return $frax_reply;
+			$this->site_ID = NULL;
+			}
 		}
-//////////////////
+	/////////////
+	private function writeLOG($message) {
+			$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/log/frax_log.txt', 'a');
+			fwrite($fp, $message);
+			fclose($fp);
+		}
+	///////////////
+	public function getFraxionService($uriID,$params) {
+			if(empty($this->urls)) {
+				$settings = json_decode(str_replace('\n', null, file_get_contents($this->plugins_path . 'settings.json')), TRUE);
+				$this->urls = $settings['urls'];
+				}
+			$cFraxion = curl_init();
+			curl_setopt($cFraxion, CURLOPT_URL, $this->urls[$uriID] . '?confid=0&' . http_build_query($params));
+			curl_setopt($cFraxion,CURLOPT_RETURNTRANSFER, true);
+			$frax_doc = curl_exec($cFraxion);
+			curl_close($cFraxion);
+			if(strpos($frax_doc,'xml') === false) {
+				$frax_reply = $frax_doc;}
+			else {
+				$frax_reply = DOMDocument::loadXML($frax_doc);}
+			//self::writeLOG("Frax reply: " . serialize($frax_doc) . " time: " .date("Y-m-d H:i:s") . "\n");
+			return $frax_reply;
+			}
+	//////////////////
 	private function convert_smart_quotes($string) {
 		$search = array(chr(145),chr(146),chr(147),chr(148),chr(151));
 		$replace = array("'","'",'"','"','-');
@@ -38,10 +58,10 @@ public function getFraxionService($uriID,$params) {
 		}
 	//////////////////////////////////
 	public function checkFUT() {
-		if(!is_robots() && !is_feed() && !is_trackback() && !is_404()) {
-			$headers = headers_list();
-			if(get_option('fraxion_site_id') != false) {	
-				$this->site_ID = get_option('fraxion_site_id');
+		//$headers = headers_list();
+		//self::writeLOG("User Agent: " . $_SERVER['HTTP_USER_AGENT'] . " time: " . time() . "\n");
+		if(!is_robots() && !is_feed() && !is_trackback() && !is_404() && strpos($_SERVER['HTTP_USER_AGENT'],'XML-Sitemaps') === false) {
+			if($this->site_ID != NULL) {
 				$renew_fut = false;
 				if(array_key_exists('fraxion_fut', $_COOKIE)) {
 					$this->fut = $_COOKIE['fraxion_fut'];
@@ -72,98 +92,134 @@ public function getFraxionService($uriID,$params) {
 			// provide content to banner - no banner
 			}
 		}
+	////// Check Status /////////////
       public function checkStatus($the_content) {
+      		$hasSiteID = get_option('fraxion_site_id');
 			$this->site_url = get_bloginfo('wpurl');
-			$fp_content = convert_chars($the_content);
-			$fp_content = strip_shortcodes($the_content);
-			$fp_content = $this->convert_smart_quotes($fp_content);
 			$status_message = '';
 			$fraxion_content = '';
-			$tag_position = strpos($fp_content,$this->the_tag);
-			if($tag_position !== false && get_option('fraxion_site_id') != false) {
+			$banner_content = array();
+			$showFooter = false;
+			$showNotLoggedIn = false;
+			$showLocked = false;
+			$tag_position = strpos($the_content,$this->the_tag);
+			$hasTag = ($tag_position===false?false:true);
+			$isLocked = false;
+			if($hasTag && $hasSiteID != false) {
 				$article_ID = get_the_ID();
-				$action = '';
-				$settings = json_decode(str_replace('\n', null, file_get_contents(plugins_url('fraxion') . '/settings.json')), TRUE);
-				$actions = $settings['actions'];
-				$status_message = '';
+				$settings = json_decode(str_replace('\n', null, file_get_contents($this->plugins_path . 'settings.json')), TRUE);
+				$this->actions = $settings['actions'];
 				$status_messages = $settings['messages'];
 				$this->urls = $settings['urls'];
 				$protocol = (stripos($_SERVER['SERVER_PROTOCOL'],'https')!==false?'https://':'http://');
 				$this->requested_url =  $protocol . $_SERVER['SERVER_NAME'] . urldecode($_SERVER['REQUEST_URI']);
-				$params = array('site_ID' => $this->site_ID, 'article_ID' => $article_ID, 'fut' => $this->fut, 'returl' => urlencode($this->requested_url));				
+				$this->params = array('site_ID' => $this->site_ID, 'article_ID' => $article_ID, 'fut' => $this->fut, 'returl' => urlencode($this->requested_url));				
 				$frax_dom = $this->getFraxionService('statfut',array('aid' => $article_ID, 'fut' => $this->fut));
 				$reply = $frax_dom->getElementsByTagName('reply');					
 				if($reply->length > 0) { // not error
 					//if($reply->item(0)->hasAttribute('futinvalid') && $reply->item(0)->getAttribute('futinvalid') == 'true') {
 					if($reply->item(0)->hasAttribute('lock') && $reply->item(0)->getAttribute('lock') == 'true') {
+						$isLocked = true;
+						
 						$this->fp_post_status = "locked";
+						$cost_money = $this->getMoneyCost($reply->item(0)->getAttribute('cost'));
 						if($reply->item(0)->hasAttribute('isLoggedIn') && $reply->item(0)->getAttribute('isLoggedIn') == 'true') { // connected to FP
-							// show user Fraxions
-							if($reply->item(0)->getAttribute('mayunlock') == 'true') {
-								$action = str_replace(array('{url_unlock}','{url_purchase}'),array($this->urls['unlock'],$this->urls['purchase']),str_replace(array('{site_ID}','{article_ID}','{fut}','{returl}'),$params,$actions['unlock']));
-								$action .= str_replace(array('{url_unlock}','{url_purchase}'),array($this->urls['unlock'],$this->urls['purchase']),str_replace(array('{site_ID}','{article_ID}','{fut}','{returl}'),$params,$actions['purchaseFrax']));
-								$status_message = str_replace(array('{fraxions}','{cost}'), array($reply->item(0)->getAttribute('fraxions'), $reply->item(0)->getAttribute('cost')), str_replace('{user_Name}', $params['user_Name'], $status_messages['unlock']));
-								}
-							else {
-								$action = '<span class="unlock_no">Not Enough Fraxions</span>';
-								$action .= str_replace(array('{url_unlock}','{url_purchase}'),array($this->urls['unlock'],$this->urls['purchase']),str_replace(array('{site_ID}','{article_ID}','{fut}','{returl}'),$params,$actions['purchaseFrax']));
-								$status_message = str_replace(array('{fraxions}','{cost}'), array($reply->item(0)->getAttribute('fraxions'), $reply->item(0)->getAttribute('cost')), str_replace('{user_Name}', $params['user_Name'], $status_messages['unlock']));
-								}
+							$showLocked = true;
 							}
 						else { // not logged-in show login and register
-							$action = str_replace('{loginFP}',$this->urls['loginFP'],str_replace(array('{site_ID}','','{fut}','{returl}'),$params,$actions['loginFP']));
-							$action .= str_replace(array('{site_url}','{url_regacct}','{returl}'), array(plugins_url('fraxion'), $this->urls['regacct'],urlencode($this->requested_url)), $actions['regacct']);
-							$status_message = str_replace(array('{fraxions}','{cost}'), array($reply->item(0)->getAttribute('fraxions'), $reply->item(0)->getAttribute('cost')), str_replace('{user_Name}', $params['user_Name'], $status_messages['connectFP']));															
+							$showNotLoggedIn = true;
 							}
 						}
 					else { // not locked
 						$this->fp_post_status = "unlocked";
-						$fraxion_content = str_replace($this->the_tag,'',$fp_content);
-						$status_message = '';
+						if($reply->item(0)->hasAttribute('isFraxioned') && $reply->item(0)->getAttribute('isFraxioned') == 'true') {
+							$showFooter = true;
+							}
 						}
 					}						
 				else { // not reply hence error
 					$error = $frax_dom->getElementsByTagName('error');
 					if($error->length > 0) {
-						$status_message = str_replace('{error}', $error->item(0)->firstChild->nodeValue, $status_messages['error']);}
+						$banner_content['status_message'] = str_replace('{error}', $error->item(0)->firstChild->nodeValue, $status_messages['error']);}
 					else {
-						$status_message = $status_messages['noComm'];}
+						$banner_content['status_message'] = $status_messages['noComm'];
+						}
 					}
 				}			
-			else { // no fraxion tag
-				$fraxion_content = $fp_content;
-				}
-				
-			if($this->fp_post_status == "locked") { // display banner
+			$fp_content = $the_content;
+			if($hasTag && $showNotLoggedIn) {			
+				$banner_content['action'] = str_replace('{loginFP}',$this->urls['loginFP'],str_replace(array('{site_ID}','','{fut}','{returl}'),$this->params,$this->actions['loginFP']));
+				$banner_content['action'] .= str_replace(array('{pluginurl}','{url_regacct}','{returl}'), array(plugins_url('fraxion'), $this->urls['regacct'],urlencode($this->requested_url)), $this->actions['regacct']);
+				$banner_content['status_message'] = str_replace(array('{fraxions}','{cost}','{money}'), array($reply->item(0)->getAttribute('fraxions'), $reply->item(0)->getAttribute('cost'), $cost_money), str_replace('{user_Name}', $this->params['user_Name'], $status_messages['connectFP']));																		
+				$banner_content['forgotpswd'] = str_replace(array('{forgotpswd}','{returl}'),array($this->urls['forgotpswd'],$this->params['returl']),$this->actions['forgotpswd']);
 				$fraxion_content = DOMDocument::loadHTML('<?xml version="1.0" encoding="UTF-16"?>' . substr($fp_content,0,$tag_position) . ' .....');
 				$fraxion_content = $fraxion_content->saveHTML();
-				$ms_chars = array('&acirc;&#128;&#156;','&acirc;&#128;&#157;','&acirc;&#128;&#153;');
-				$real_chars = array('"','"',"'");
-				$fraxion_content = str_replace($ms_chars,$real_chars,$fraxion_content);
-				$fraxion_content_full = "<div id='fraxion_post_content_" . get_the_ID() . "'><p>$fraxion_content</p>" . $this->showBanner($status_message,$action) . '</div>';
+				$fraxion_content_full = "<div id='fraxion_post_content_" . get_the_ID() . "'><p>$fraxion_content</p>" . $this->showBanner('',$banner_content) . '</div>';
 				return $fraxion_content_full;
 				}
-			else { // do not display banner
-				return $fraxion_content;}
+			elseif($hasTag && $showLocked) {			
+				if($reply->item(0)->getAttribute('mayunlock') == 'true') {
+					$banner_content['action'] = str_replace(array('{url_unlock}','{url_purchase}'),array($this->urls['unlock'],$this->urls['purchase']),str_replace(array('{site_ID}','{article_ID}','{fut}','{returl}'),$this->params,$this->actions['unlock']));
+					$banner_content['action'] .= str_replace('{logoutFP}',$this->urls['logoutFP'],str_replace(array('{site_ID}','{article_ID}','{fut}','{returl}'),$this->params,$this->actions['logoutFP']));
+					$banner_content['action'] .= str_replace(array('{url_unlock}','{url_purchase}'),array($this->urls['unlock'],$this->urls['purchase']),str_replace(array('{site_ID}','{article_ID}','{fut}','{returl}'),$this->params,$this->actions['purchaseFrax']));
+					$banner_content['status_message'] = str_replace(array('{fraxions}','{cost}'), array($reply->item(0)->getAttribute('fraxions'), $reply->item(0)->getAttribute('cost')), str_replace('{user_Name}', $this->params['user_Name'], $status_messages['unlock']));
+					$banner_content['viewaccount'] = str_replace(array('{viewaccount}','{returl}'),array($this->urls['viewaccount'],$this->params['returl']),$this->actions['viewAccount']);
+					}
+				else {
+					$banner_content['action'] = '<span class="unlock_no">Not Enough Fraxions</span>';
+					$banner_content['action'] .= str_replace('{logoutFP}',$this->urls['logoutFP'],str_replace(array('{site_ID}','{article_ID}','{fut}','{returl}'),$this->params,$this->actions['logoutFP']));
+					$banner_content['action'] .= str_replace(array('{url_unlock}','{url_purchase}'),array($this->urls['unlock'],$this->urls['purchase']),str_replace(array('{site_ID}','{article_ID}','{fut}','{returl}'),$this->params,$this->actions['purchaseFrax']));
+					$banner_content['status_message'] = str_replace(array('{fraxions}','{cost}'), array($reply->item(0)->getAttribute('fraxions'), $reply->item(0)->getAttribute('cost')), str_replace('{user_Name}', $this->params['user_Name'], $status_messages['unlock']));
+					}		
+				$fraxion_content = DOMDocument::loadHTML('<?xml version="1.0" encoding="UTF-16"?>' . substr($fp_content,0,$tag_position) . ' .....');
+				$fraxion_content = $fraxion_content->saveHTML();
+				$fraxion_content_full = "<div id='fraxion_post_content_" . get_the_ID() . "'><p>$fraxion_content</p>" . $this->showBanner('',$banner_content) . '</div>';
+				return $fraxion_content_full;
+				}
+			elseif($showFooter) {
+				$banner_content['viewaccount'] = str_replace(array('{viewaccount}','{returl}'),array($this->urls['viewaccount'],$this->params['returl']),$this->actions['viewAccount']);
+				$banner_content['action'] = str_replace('{logoutFP}',$this->urls['logoutFP'],str_replace(array('{site_ID}','{article_ID}','{fut}','{returl}'),$this->params,$this->actions['logoutFP']));
+				$banner_content['action'] .= str_replace('{url_purchase}',$this->urls['purchase'],str_replace(array('{site_ID}','{article_ID}','{fut}','{returl}'),$this->params,$this->actions['purchaseFrax']));
+				return str_replace($this->the_tag,'',$fp_content) . $this->showBanner('footer',$banner_content);
+				}
+			else { // do nothing
+				return $the_content;
+				}
 		}
 	/////
-		private function showBanner($status_message,$action,$debug_message='') {
-			$banner = file_get_contents(plugins_url('fraxion') . '/fraxion_banner.html');
-			$banner = str_replace('{action}',$action,$banner);
+		private function showBanner($which='main',$banner_content=array()) {
+			$banner = file_get_contents($this->plugins_path . ($which=='footer'?'fraxion_banner_foot.html':'fraxion_banner.html'));
+			$banner = str_replace('{status_message}',$banner_content['status_message'],$banner);
+			$banner = str_replace('{action}',$banner_content['action'],$banner);
 			$banner = str_replace('{site_url}',$this->site_url,$banner);
 			$banner = str_replace('{postID}',get_the_ID(),$banner);
-			$banner = str_replace('{status_message}',$status_message,$banner);
-			$banner = str_replace('{debug_message}',$debug_message,$banner);
+			$banner = str_replace('{forgotpswd}',$banner_content['forgotpswd'],$banner);
+			$banner = str_replace('{viewaccount}',$banner_content['viewaccount'],$banner);
+			$banner = str_replace('{catalogue}',$this->urls['catalogue'],$banner);
 			$banner = str_replace('{version}',$this->version,$banner);
 			return $banner;
 		}
+		private function getMoneyCost($fraxions_cost) {
+			$money_cost = '';
+			if($fraxions_cost == 0) {
+				$money_cost = 'free';
+				}
+			elseif($fraxions_cost < 100) {
+				$money_cost = $fraxions_cost . ' cents';
+				}
+			else {
+				$dollars = $fraxions_cost/100;
+				$money_cost = '$' . number_format($dollars,2);
+				}
+			return $money_cost;
+			}
 	///////
 		public function fraxion_js() {
-			echo file_get_contents(plugins_url('fraxion') . '/fraxion.js');
+			echo file_get_contents($this->plugins_path . 'fraxion.js');
 		}
 	///////
 		public function fraxion_css() {
-			echo file_get_contents(plugins_url('fraxion') . '/fraxion_banner.css');
+			echo file_get_contents($this->plugins_path . 'fraxion_banner.css');
 		}
 	//////
 		public function fraxion_respond() {
@@ -181,7 +237,7 @@ public function getFraxionService($uriID,$params) {
 		}
 	///////
 		public function admin_js() {
-			echo file_get_contents(plugins_url('fraxion') . '/fraxion_admin.js');
+			echo file_get_contents($this->plugins_path . 'fraxion_admin.js');
 		}
 	///////
 		public function admin_css() {
@@ -199,8 +255,8 @@ public function getFraxionService($uriID,$params) {
 		public function admin_Settings() {
 			global $user_ID;
 			get_currentuserinfo();
-			$settings = json_decode(str_replace('\n', null, file_get_contents(plugins_url('fraxion') . '/settings.json')), TRUE);
-			$actions = $settings['actions'];
+			$settings = json_decode(str_replace('\n', null, file_get_contents($this->plugins_path . 'settings.json')), TRUE);
+			$this->actions = $settings['actions'];
 			$status_message = '';
 			$status_messages = $settings['messages'];
 			$this->urls = $settings['urls'];
@@ -215,7 +271,7 @@ public function getFraxionService($uriID,$params) {
 					update_option('fraxion_site_id',$_POST['fraxion_site_id'] );
 					$admin_site_settings_panel .= '<div class="updated"><p><strong>Fraxion Settings Saved :)</strong></p></div>';
 					}
-				$settings = json_decode(str_replace('\n', null, file_get_contents(plugins_url('fraxion') . '/settings.json')), TRUE);
+				$settings = json_decode(str_replace('\n', null, file_get_contents($this->plugins_path . 'settings.json')), TRUE);
 				$admin_site_settings_panel .= 'Fraxion Payment Admin - <a href="'. $this->urls['admin'] . '?returl=http' . ($_SERVER['HTTPS']?'s':null) . urlencode('://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']) . '&siteurl=' . urlencode(get_option('home')) . '&blogname=' . urlencode(get_option('blogname')) .  '&sid=' . get_option('fraxion_site_id') .  '&uid_wp=' . $user_ID . '&confid=0">Click Here</a><br />';
 				if (function_exists('get_blog_count')) { ///// is MU //////
 					$blog_details =  get_active_blog_for_user($user_ID);
@@ -275,7 +331,7 @@ public function getFraxionService($uriID,$params) {
 			$status_message;
 			global $user_ID;
 			get_currentuserinfo();
-			$settings = json_decode(str_replace('\n', null, file_get_contents(plugins_url('fraxion') . '/settings.json')), TRUE);
+			$settings = json_decode(str_replace('\n', null, file_get_contents($this->plugins_path . 'settings.json')), TRUE);
 			$this->site_ID = get_option('fraxion_site_id');
 			if($this->site_ID != '') {
 				$article_ID = '';
@@ -320,10 +376,10 @@ public function getFraxionService($uriID,$params) {
 				echo '<div id="fraxion_details">';
 				if($status_message != "") {
 					echo $status_message;
-					$actions = $settings['actions'];
+					$this->actions = $settings['actions'];
 					$this->requested_url =  $protocol . $_SERVER['SERVER_NAME'] . urldecode($_SERVER['REQUEST_URI']);				
-					$params = array('site_ID' => $this->site_ID, 'pluginurl' => plugins_url('fraxion'), 'article_ID' => $article_ID, 'user_ID' => $user_ID, 'returl' => urlencode('http://' . $this->requested_url));
-					echo str_replace('{url_connectacct}', $this->urls['connectacct'],str_replace(array('{site_ID}','{pluginurl}','{article_ID}','{user_ID}','{returl}'),$params,$actions['connectFP']));
+					$admin_params = array('site_ID' => $this->site_ID, 'pluginurl' => plugins_url('fraxion'), 'article_ID' => $article_ID, 'user_ID' => $user_ID, 'returl' => urlencode('http://' . $this->requested_url));
+					echo str_replace('{url_connectacct}', $this->urls['connectacct'],str_replace(array('{site_ID}','{pluginurl}','{article_ID}','{user_ID}','{returl}'),$admin_params,$this->actions['connectFP']));
 					echo '</div>';
 					}
 				else {
@@ -400,7 +456,7 @@ public function getFraxionService($uriID,$params) {
 			//if($post_ID != '') {
 			if ( $the_post = wp_is_post_revision($post_ID->ID) ) { $article_ID = $the_post; }
 			else { $article_ID = $post_ID->ID; }
-			$settings = json_decode(str_replace('\n', null, file_get_contents(plugins_url('fraxion') . '/settings.json')), TRUE);
+			$settings = json_decode(str_replace('\n', null, file_get_contents($this->plugins_path . 'settings.json')), TRUE);
 			$this->urls = $settings['urls'];
 			echo '<script language="javascript" type="text/javascript">
 				jQuery(document).ready( private function () {	

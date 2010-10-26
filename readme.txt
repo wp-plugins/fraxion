@@ -1,19 +1,19 @@
 === Fraxion Payments Micropayments ===
 Contributors:  GarryCL, DanDare2050, Chris Wilkins
-Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news, newspaper, digital news, books, short stories
+Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news, newspaper, digital news, books, short stories, online articles
 Requires at least: 2.8.4
 Tested up to: 3.0.1
-Stable tag: 1.0.2
+Stable tag: 1.1.0
 
-"Micropayments for bloggers". You can sell your articles or short stories for as little as 1c. You set the price and readers "unlock" articles with one click.
+"Micropayments for bloggers". Sell your articles or short stories for as little as 1c. You set the price. Readers "unlock" with one click.
 
 == Description ==
 
-This extremely simple plug-in immediately makes "micropayments for bloggers a reality". Once set up and registered a blogger, with only a few simple steps, can lock their articles and stories and set their own prices for their content, as little as 1c.
+This simple plug-in immediately makes "micropayments for bloggers" a reality. Set up is simple, and with only a few steps you can lock your articles and stories. You set your own prices for your content, as little as 1c.
 
 Readers can unlock these articles with one-click, exchanging a small number of cents for quality content.
 
-This makes it incredibly easy for authors to charge for their content in a way that is easy, convenient and priced fairly for their readers.
+This makes it simple for authors to charge for content in a way that is easy, convenient and priced fairly for their readers.
 
 A great plug-in for journalists, bloggers and writers who want to turn their creativity into an income.
 
@@ -25,28 +25,27 @@ A great plug-in for journalists, bloggers and writers who want to turn their cre
 3. Activate the plugin through the 'Plugins' menu in WordPress
 4. Go to "settings" and then "Fraxion" to register you site.
 
-For video on how to use go to http://www.fraxionpayments.com/?page_id=166
+For video on how to use go to http://www.fraxionpayments.com/writers/
 
 == Frequently Asked Questions ==
 
 = What are micropayments? =
 
-They are very small amounts you pay for online content. By actually paying for this content the quality is naturally going to be better than free content.
+Micropayments are very small amounts you pay for online content. By actually paying for this content the quality is naturally going to be better than free content.
 
-Micropayments forms one part of the ongoing debate of "free" vs "paid" content, made prominent by people such as Rupert Murdoch and newspapers as the New York Times.
+Micropayments form one part of the ongoing debate of "free" vs "paid" content, made prominent by people such as Rupert Murdoch and newspapers like the New York Times.
 
 = Where does this technology come from? =
 
-The technology has successfully been in operation for more than seven years at www.towergames.com and was migrated.
+The core technology has successfully been in operation since 2004 at www.towergames.com and was migrated to Fraxion Payments in 2010.
 
 = What about "free" content? =
 
-We don't believe in it. What we believe in is "fair exchange". http://www.fraxionpayments.com/?p=13.
+We don't believe in it. What we believe in is "fair exchange". http://www.fraxionpayments.com/2010/02/blog/paidcontent/fair-exchange/.
 
 = Will this help online journalism? =
 
-It can only help. With 31,000 journalist laid off in the USA alone over the last few years this is now a great way for those same people to get back to work but this time for themselves doing what they know what to do. That is, using their contacts to discover and create great stories.
-
+It can only help. With 31,000 journalist laid off in the USA alone over the last few years this is now a great way for those same people to get back to work, but this time for themselves doing what they know best. That is, using their contacts to discover and create great stories.
 
 == Screenshots ==
 
@@ -54,8 +53,13 @@ It can only help. With 31,000 journalist laid off in the USA alone over the last
 2. The writer's / editor's screen
 3. Setting the price of a locked article
 
-
 == Changelog ==
+
+= 1.1.0 =
+New Functions:
+ View Account, Catalogue link, logout, footer for unlocked documents, improved information for first time readers.
+Fixes:
+ RSS Feed handling, output for certain common robots such as xml-sitemap and tweetmeme, visual display protection and general robustness.
 
 = 1.0.2 =
 Fixed a bug that interfered with content display using I.E., Safari and Chrome on Windows OS with some themes.
@@ -118,6 +122,11 @@ Remove faulty admin button. Replace later.
 The first release. We think most bugs have been solved. But of course please let us know if you find any.
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Several new functions to enhance user friendliness including View Account, Catalogue link, logout, footer for unlocked documents (with future use for rating documents), and improved information for first time readers.
+
+Some problems fixed with RSS Feed handling, output for certain common robots such as xml-sitemap and tweetmeme. Also visual display protection and general robustness.
 
 = 1.0.2 =
 If your locked articles display only headings in some circumstances or the links to unlock are not working you need this version.
