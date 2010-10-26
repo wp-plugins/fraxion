@@ -4,7 +4,7 @@ Tags: micropayments, online journalism, citizen journalism, paid content, blogge
 Requires at least: 2.8.4
 Tested up to: 3.0.1
 Stable tag: 1.1.0
-
+ 
 "Micropayments for bloggers". Sell your articles or short stories for as little as 1c. You set the price. Readers "unlock" with one click.
 
 == Description ==
