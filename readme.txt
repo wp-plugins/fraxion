@@ -55,7 +55,7 @@ It can only help. With 31,000 journalist laid off in the USA alone over the last
 
 == Changelog ==
 
-= 1.1.0 =
+= 1.1.1 =
 New Functions:
  View Account, Catalogue link, logout, footer for unlocked documents, improved information for first time readers.
 Fixes:
@@ -123,7 +123,7 @@ The first release. We think most bugs have been solved. But of course please let
 
 == Upgrade Notice ==
 
-= 1.1.0 =
+= 1.1.1 =
 Several new functions to enhance user friendliness including View Account, Catalogue link, logout, footer for unlocked documents (with future use for rating documents), and improved information for first time readers.
 
 Some problems fixed with RSS Feed handling, output for certain common robots such as xml-sitemap and tweetmeme. Also visual display protection and general robustness.
