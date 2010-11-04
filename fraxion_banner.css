@@ -1,38 +1,45 @@
 <style type='text/css'>
-		.fraxion_banner { height:96px; border: solid 1px #AAA; background-color:#EEF; color:#666; padding: 4px; margin-bottom:10px; font-family: Arial, Helvetica, sans-serif; font-size:13px;}
-		.fraxion_banner a {font-family: Arial, Helvetica, sans-serif; font-size:13px; text-decoration:none; }
+		.fraxion_banner { height:96px; max-width:520px; border: solid 1px #AAA; background-color:#EEF; color:#666; padding: 4px; margin-bottom:10px; font-family: Arial, Helvetica, sans-serif; font-size:11px;}
+		.fraxion_banner a {font-family: Arial, Helvetica, sans-serif; font-size:11px; text-decoration:none; color:#147;}
+		.fraxion_banner a.unlock { color:red;}
+		.fraxion_banner a.logout { color:red;}
+		.fraxion_banner a.purchase { color:green;}
 		.fraxion_banner a:hover {text-decoration:underline;}
 		.fraxion_banner a:visited {text-decoration:none;}
 		.fraxion_banner_top { }
 		.fraxion_banner_image { float:left; padding-left:6px; width:90px; height:36px;}
+		.fraxion_banner_image img { padding:0px; margin:0px;}
 		.fraxion_banner_image a { width:100%; height:100%;}
-		.fraxion_banner_status { float:left; padding-left:6px; font-size:90%;}
+		.fraxion_banner_status { float:left; padding-left:6px;}
 		.fraxion_banner_status span { display:block;}
-		.fraxion_banner_middle { clear:both;}
-		.fraxion_banner_action { clear:both; padding-left:6px; margin-top:2px; text-align:center;}
+		.fraxion_banner_middle { clear:both; height: 20px;}
+		.fraxion_banner_action { clear:both; padding-left:6px; margin-top:0px; text-align:center;}
 		.fraxion_banner_action .action { float:left; margin-left:30px;}
 		.fraxion_banner_action img { float:right; }
 		.fraxion_banner_bottom .action {position: relative; float:left; margin-left:12px;}
-		.fraxion_banner_bottom { clear:both; line-height:12px;}
-		.fraxion_banner_version { font-size:80%; float:right;}
-		.fraxion_banner_left { float:left;}
+		.fraxion_banner_bottom { clear:both; line-height:11px;}
+		.fraxion_banner_version { font-size:90%; float:right;}
+		.fraxion_banner_left { float:left; height:20px;}
 		.fraxion_banner_left .action {float:left; margin-left:12px;}
-		.fraxion_banner p { margin: 0px; padding: 2px 0px; line-height: 12px;}
-		.fraxion_banner_foot { border: solid 1px #AAA; background-color:#EEF; color:#666; padding: 0px 4px; margin:0px;}
+		.fraxion_banner p { margin: 0px 0px 4px 0px !important; padding: 2px 0px !important; line-height: 11px !important;}
+		.fraxion_banner_foot { max-width:600px; border: solid 1px #AAA; background-color:#EEF; color:#666; padding: 2px 4px; margin:0px; font-family: Arial, Helvetica, sans-serif; font-size:11px;}
+		.fraxion_banner_foot a {font-family: Arial, Helvetica, sans-serif; font-size:11px; text-decoration:none; color:#147;}
+		.fraxion_banner_foot a.unlock { color:red;}
+		.fraxion_banner_foot a.logout { color:red;}
+		.fraxion_banner_foot a.purchase { color:green;}
+		.fraxion_banner_foot a:hover {text-decoration:underline;}
+		.fraxion_banner_foot a:visited {text-decoration:none;}
 		.fraxion_banner_foot h3 { margin: 4px; padding: 2px; color:#036;}
 		.fraxion_banner_foot_image { float: left; padding-left:4px;}
-		.fraxion_banner_foot_status { float: left; padding-left:4px; font-size:80%;}
+		.fraxion_banner_foot_status { float: left; padding-left:4px;}
 		.fraxion_banner_foot_action { float:left;}
-		.fraxion_banner_foot_version { font-size:80%; float:right;}
+		.fraxion_banner_foot_version { font-size:90%; float:right;}
 		.fraxion_banner_foot_action img { float:right; }
-		.fraxion_banner_foot p { margin: 0px; padding: 0px; line-height: 4px;}
-		.unlock { color:red;}
-		.purchase { color:green;}
-		.logout { color:red;}
+		.fraxion_banner_foot p {  margin: 0px 0px 4px 0px !important; padding: 2px 0px !important; line-height: 8px !important;}
 		.unlock_no { float:left; color:#999;}
 		.tip {font:10px/12px Arial,Helvetica,sans-serif; border:solid 1px #666666; width:270px; padding:1px; position:absolute; z-index:100; visibility:hidden; color:#333333; top:20px; left:90px; background-color:#ffffcc; layer-background-color:#ffffcc;}
 		img.tip_button { margin: 0px 4px; }
-		.frax_pp_logo {float:right; position:relative; top:-6px;}
+		.frax_pp_logo {float:right; position:relative; top:-6px; height:22px;}
 		.frax_pp_logo td { height:24px;}
-		.frax_banner_link_small a { font-size:80%; }
+		.frax_banner_link_small a { }
 </style>

@@ -10,9 +10,9 @@
 "forgotpswd":"<div class='action'><a href='{forgotpswd}?returl={returl}'>forgot password</a></div>"
 },
 "messages":{
-"connectFP":"<p>Login to a Fraxion Payments account to unlock this article.</p><p>Cost to unlock = {cost} (approx {money})</p>",
-"unlock":"You are connected to Fraxion Payments<br />Your Fraxions = {fraxions} | Cost to unlock = {cost}",
-"error":"An unexpected condition has occurred :(<br />{error}","noComm":"Cannot communicate with the Fraxion Server!!!",
+"connectFP":"<p>Login to a Fraxion Payments account to unlock this article.</p><p>Cost to unlock = {cost}</p>",
+"unlock":"<p>You are connected to Fraxion Payments</p><p>Your Fraxions = {fraxions} | Cost to unlock = {cost}</p>",
+"error":"<p>An unexpected condition has occurred :(</p><p>{error}","noComm":"Cannot communicate with the Fraxion Server!!!</p>",
 "register_single":"Register a standalone WP Installation to enable article locking",
 "register_mu_base":"Register the WP MU base installation to enable article locking",
 "register_mu_blog":"Register a WP MU Blog Site to enable article locking",

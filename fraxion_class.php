@@ -1,7 +1,7 @@
 <?php
 
 class FraxionPayments {
-	private $version = '1.1.1';
+	private $version = '1.1.3';
 	public $site_ID;
 	public $plugins_path;
 	private $urls;
@@ -44,16 +44,18 @@ class FraxionPayments {
 			$frax_doc = curl_exec($cFraxion);
 			curl_close($cFraxion);
 			if(strpos($frax_doc,'xml') === false) {
-				$frax_reply = $frax_doc;}
+				$frax_reply = $frax_doc;
+				}
 			else {
-				$frax_reply = DOMDocument::loadXML($frax_doc);}
+				$frax_reply = DOMDocument::loadXML($frax_doc);
+				}
 			//self::writeLOG("Frax reply: " . serialize($frax_doc) . " time: " .date("Y-m-d H:i:s") . "\n");
 			return $frax_reply;
 			}
 	//////////////////
-	private function convert_smart_quotes($string) {
-		$search = array(chr(145),chr(146),chr(147),chr(148),chr(151));
-		$replace = array("'","'",'"','"','-');
+	private function convert_ms_chars($string) {
+		$search = array(chr(145),chr(146),chr(147),chr(148),chr(151),'&acirc;&#128;&#156;','&acirc;&#128;&#157;','&acirc;&#128;&#153;','&acirc;&#128;&#147;','&acirc;&euro;&ldquo;');
+		$replace = array("'","'",'"','"','-','"','"',"'","-","-");
 		return str_replace($search, $replace, $string);
 		}
 	//////////////////////////////////
@@ -66,12 +68,17 @@ class FraxionPayments {
 				if(array_key_exists('fraxion_fut', $_COOKIE)) {
 					$this->fut = $_COOKIE['fraxion_fut'];
 					$fut_dom = $this->getFraxionService('statfut',array('fut' => $this->fut));
-					$reply = $fut_dom->getElementsByTagName('reply');
-					if($reply->item(0)->hasAttribute('futinvalid') && $reply->item(0)->getAttribute('futinvalid') == 'true') {
-						$renew_fut = true;
+					if(is_object($fut_dom) && $fut_dom->getElementsByTagName('reply') != null) {
+						$reply = $fut_dom->getElementsByTagName('reply');
+						if($reply->item(0)->hasAttribute('futinvalid') && $reply->item(0)->getAttribute('futinvalid') == 'true') {
+							$renew_fut = true;
+							}
+						else {
+							setcookie("fraxion_fut", $_COOKIE['fraxion_fut'], time()+36000,'/');
+							}
 						}
 					else {
-						setcookie("fraxion_fut", $_COOKIE['fraxion_fut'], time()+36000,'/');
+						echo $fut_dom;
 						}
 					}
 				else {
@@ -79,11 +86,16 @@ class FraxionPayments {
 					}
 				if($renew_fut) {
 					$fut_dom = $this->getFraxionService('getfut',array('sid' => $this->site_ID));
-					$reply = $fut_dom->getElementsByTagName('reply');
-					$this->fut = $reply->item(0)->nodeValue;
-					setcookie("fraxion_fut", $this->fut, time()+36000,'/');
-					header('Location: ' . $this->urls['confut'] . '?confid=0&fut=' . $this->fut . '&returl=' . urlencode('http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']));
-					exit(0);
+					if(is_object($fut_dom) && $fut_dom->getElementsByTagName('reply') != null) {
+						$reply = $fut_dom->getElementsByTagName('reply');
+						$this->fut = $reply->item(0)->nodeValue;
+						setcookie("fraxion_fut", $this->fut, time()+36000,'/');
+						header('Location: ' . $this->urls['confut'] . '?confid=0&fut=' . $this->fut . '&returl=' . urlencode('http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']));
+						exit(0);
+						}
+					else {
+						echo $fut_dom;
+						}
 					}
 				}
 				//}
@@ -102,6 +114,7 @@ class FraxionPayments {
 			$showFooter = false;
 			$showNotLoggedIn = false;
 			$showLocked = false;
+			$the_content = convert_chars($the_content);
 			$tag_position = strpos($the_content,$this->the_tag);
 			$hasTag = ($tag_position===false?false:true);
 			$isLocked = false;
@@ -120,9 +133,7 @@ class FraxionPayments {
 					//if($reply->item(0)->hasAttribute('futinvalid') && $reply->item(0)->getAttribute('futinvalid') == 'true') {
 					if($reply->item(0)->hasAttribute('lock') && $reply->item(0)->getAttribute('lock') == 'true') {
 						$isLocked = true;
-						
 						$this->fp_post_status = "locked";
-						$cost_money = $this->getMoneyCost($reply->item(0)->getAttribute('cost'));
 						if($reply->item(0)->hasAttribute('isLoggedIn') && $reply->item(0)->getAttribute('isLoggedIn') == 'true') { // connected to FP
 							$showLocked = true;
 							}
@@ -146,14 +157,14 @@ class FraxionPayments {
 						}
 					}
 				}			
-			$fp_content = $the_content;
 			if($hasTag && $showNotLoggedIn) {			
 				$banner_content['action'] = str_replace('{loginFP}',$this->urls['loginFP'],str_replace(array('{site_ID}','','{fut}','{returl}'),$this->params,$this->actions['loginFP']));
 				$banner_content['action'] .= str_replace(array('{pluginurl}','{url_regacct}','{returl}'), array(plugins_url('fraxion'), $this->urls['regacct'],urlencode($this->requested_url)), $this->actions['regacct']);
-				$banner_content['status_message'] = str_replace(array('{fraxions}','{cost}','{money}'), array($reply->item(0)->getAttribute('fraxions'), $reply->item(0)->getAttribute('cost'), $cost_money), str_replace('{user_Name}', $this->params['user_Name'], $status_messages['connectFP']));																		
+				$banner_content['status_message'] = str_replace(array('{fraxions}','{cost}'), array($reply->item(0)->getAttribute('fraxions'), $this->getMoneyCost($reply->item(0)->getAttribute('cost'))), str_replace('{user_Name}', $this->params['user_Name'], $status_messages['connectFP']));																		
 				$banner_content['forgotpswd'] = str_replace(array('{forgotpswd}','{returl}'),array($this->urls['forgotpswd'],$this->params['returl']),$this->actions['forgotpswd']);
-				$fraxion_content = DOMDocument::loadHTML('<?xml version="1.0" encoding="UTF-16"?>' . substr($fp_content,0,$tag_position) . ' .....');
+				$fraxion_content = DOMDocument::loadHTML('<?xml version="1.0" encoding="UTF-8"?>' . substr($the_content,0,$tag_position) . ' .....');
 				$fraxion_content = $fraxion_content->saveHTML();
+				$fraxion_content = $this->convert_ms_chars($fraxion_content);
 				$fraxion_content_full = "<div id='fraxion_post_content_" . get_the_ID() . "'><p>$fraxion_content</p>" . $this->showBanner('',$banner_content) . '</div>';
 				return $fraxion_content_full;
 				}
@@ -171,8 +182,9 @@ class FraxionPayments {
 					$banner_content['action'] .= str_replace(array('{url_unlock}','{url_purchase}'),array($this->urls['unlock'],$this->urls['purchase']),str_replace(array('{site_ID}','{article_ID}','{fut}','{returl}'),$this->params,$this->actions['purchaseFrax']));
 					$banner_content['status_message'] = str_replace(array('{fraxions}','{cost}'), array($reply->item(0)->getAttribute('fraxions'), $reply->item(0)->getAttribute('cost')), str_replace('{user_Name}', $this->params['user_Name'], $status_messages['unlock']));
 					}		
-				$fraxion_content = DOMDocument::loadHTML('<?xml version="1.0" encoding="UTF-16"?>' . substr($fp_content,0,$tag_position) . ' .....');
+				$fraxion_content = DOMDocument::loadHTML('<?xml version="1.0" encoding="UTF-8"?>' . substr($the_content,0,$tag_position) . ' .....');
 				$fraxion_content = $fraxion_content->saveHTML();
+				$fraxion_content = $this->convert_ms_chars($fraxion_content);
 				$fraxion_content_full = "<div id='fraxion_post_content_" . get_the_ID() . "'><p>$fraxion_content</p>" . $this->showBanner('',$banner_content) . '</div>';
 				return $fraxion_content_full;
 				}
@@ -180,7 +192,7 @@ class FraxionPayments {
 				$banner_content['viewaccount'] = str_replace(array('{viewaccount}','{returl}'),array($this->urls['viewaccount'],$this->params['returl']),$this->actions['viewAccount']);
 				$banner_content['action'] = str_replace('{logoutFP}',$this->urls['logoutFP'],str_replace(array('{site_ID}','{article_ID}','{fut}','{returl}'),$this->params,$this->actions['logoutFP']));
 				$banner_content['action'] .= str_replace('{url_purchase}',$this->urls['purchase'],str_replace(array('{site_ID}','{article_ID}','{fut}','{returl}'),$this->params,$this->actions['purchaseFrax']));
-				return str_replace($this->the_tag,'',$fp_content) . $this->showBanner('footer',$banner_content);
+				return str_replace($this->the_tag,'',$the_content) . $this->showBanner('footer',$banner_content);
 				}
 			else { // do nothing
 				return $the_content;
@@ -205,11 +217,11 @@ class FraxionPayments {
 				$money_cost = 'free';
 				}
 			elseif($fraxions_cost < 100) {
-				$money_cost = $fraxions_cost . ' cents';
+				$money_cost = $fraxions_cost . ' (approx ' . $fraxions_cost . ' cents)';
 				}
 			else {
 				$dollars = $fraxions_cost/100;
-				$money_cost = '$' . number_format($dollars,2);
+				$money_cost = $fraxions_cost . ' (approx $' . number_format($dollars,2) . ')';
 				}
 			return $money_cost;
 			}

@@ -3,9 +3,9 @@ Contributors:  GarryCL, DanDare2050, Chris Wilkins
 Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news, newspaper, digital news, books, short stories, online articles
 Requires at least: 2.8.4
 Tested up to: 3.0.1
-Stable tag: 1.1.1
- 
-"Micropayments for bloggers". Sell your articles or short stories for as little as 1c. You set the price. Readers "unlock" with one click.
+Stable tag: 1.1.3
+
+"Micropayments for bloggers". Sell articles, short stories for as little as 1c. You set the price. Readers "unlock" with 1 click.
 
 == Description ==
 
@@ -55,7 +55,12 @@ It can only help. With 31,000 journalist laid off in the USA alone over the last
 
 == Changelog ==
 
-= 1.1.1 =
+= 1.1.3 =
+Fixed CSS for banners to prevent banner from being disrupted by themes.
+Repaired character translation for various characters.
+Minor stability fixes.
+
+= 1.1.0 =
 New Functions:
  View Account, Catalogue link, logout, footer for unlocked documents, improved information for first time readers.
 Fixes:
@@ -123,7 +128,10 @@ The first release. We think most bugs have been solved. But of course please let
 
 == Upgrade Notice ==
 
-= 1.1.1 =
+= 1.1.3 =
+CSS improvements for the banners and fixes to translation of special characters as well as all the new functionality of 1.1.0, new functions to enhance user friendliness including View Account, Catalogue link, logout, footer for unlocked documents (with future use for rating documents), and improved information for first time readers. Problems fixed with RSS Feed handling, output for certain common robots such as xml-sitemap and tweetmeme.
+
+= 1.1.0 =
 Several new functions to enhance user friendliness including View Account, Catalogue link, logout, footer for unlocked documents (with future use for rating documents), and improved information for first time readers.
 
 Some problems fixed with RSS Feed handling, output for certain common robots such as xml-sitemap and tweetmeme. Also visual display protection and general robustness.
@@ -192,3 +200,5 @@ These are some sites that use the Fraxion Payments plug-in. Check them out if yo
 2. http://www.casualravings.com - Chris Wilkins' blog
 3. http://www.swordandrifle.com - Military history magazine associated with http://www.towergames.com
 4. http://www.garunawebdesigner.com - How to do lots of stuff with web sites
+
+Go to the fraxion payments catalogue for an up to date list: http://www.fraxionpayments.com/catalogue
