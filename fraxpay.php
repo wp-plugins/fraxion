@@ -8,7 +8,7 @@ Plugin Name: Fraxion Payments
 Plugin URI: http://www.fraxionpayments.com/
 Description: This plugin manages document locking.
 Author: Fraxion Payments
-Version: 1.1.3
+Version: 1.2.0
 Author URI: http://www.fraxionpayments.com/
 */
 
@@ -26,4 +26,5 @@ add_action('wp_head', array($frax,'fraxion_js'));
 add_action('wp_head', array($frax,'fraxion_css'));
 add_filter('the_content', 'do_shortcode',1);
 add_filter('the_content', array($frax,'checkStatus'),10,1);
-add_action('loop_end',  array($frax,'fraxion_respond'));
+add_filter('the_excerpt', array($frax,'checkStatus'),10,1);
+add_action('wp_footer',  array($frax,'fraxion_respond'));

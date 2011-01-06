@@ -2,8 +2,8 @@
 Contributors:  GarryCL, DanDare2050, Chris Wilkins
 Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news, newspaper, digital news, books, short stories, online articles
 Requires at least: 2.8.4
-Tested up to: 3.0.1
-Stable tag: 1.1.3
+Tested up to: 3.0.4
+Stable tag: 1.2.0
 
 "Micropayments for bloggers". Sell articles, short stories for as little as 1c. You set the price. Readers "unlock" with 1 click.
 
@@ -14,6 +14,8 @@ This simple plug-in immediately makes "micropayments for bloggers" a reality. Se
 Readers can unlock these articles with one-click, exchanging a small number of cents for quality content.
 
 This makes it simple for authors to charge for content in a way that is easy, convenient and priced fairly for their readers.
+
+Locked articles can also appear in the Fraxion Payments catalogue with new features for user rating and searching on the way.
 
 A great plug-in for journalists, bloggers and writers who want to turn their creativity into an income.
 
@@ -54,6 +56,10 @@ It can only help. With 31,000 journalist laid off in the USA alone over the last
 3. Setting the price of a locked article
 
 == Changelog ==
+
+= 1.2.0 =
+New look and feel for the banners improving usability, including more robust CSS.
+Fixed a bug to do with registering a site running in a sub domain.
 
 = 1.1.3 =
 Fixed CSS for banners to prevent banner from being disrupted by themes.
@@ -128,6 +134,10 @@ The first release. We think most bugs have been solved. But of course please let
 
 == Upgrade Notice ==
 
+= 1.2.0 =
+New look and feel for the banners improving usability, including more robust CSS. This is a must have upgrade.
+Fixed a bug to do with registering a site running in a sub domain.
+
 = 1.1.3 =
 CSS improvements for the banners and fixes to translation of special characters as well as all the new functionality of 1.1.0, new functions to enhance user friendliness including View Account, Catalogue link, logout, footer for unlocked documents (with future use for rating documents), and improved information for first time readers. Problems fixed with RSS Feed handling, output for certain common robots such as xml-sitemap and tweetmeme.
 
@@ -199,6 +209,6 @@ These are some sites that use the Fraxion Payments plug-in. Check them out if yo
 1. http://www.kwikreads.com	- Short stories by various authors
 2. http://www.casualravings.com - Chris Wilkins' blog
 3. http://www.swordandrifle.com - Military history magazine associated with http://www.towergames.com
-4. http://www.garunawebdesigner.com - How to do lots of stuff with web sites
+4. http://www.battleaxebooks.com/handar/ - A complete sword and sorcery novel with individual chapters locked
 
 Go to the fraxion payments catalogue for an up to date list: http://www.fraxionpayments.com/catalogue

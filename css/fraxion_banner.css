@@ -1,0 +1,171 @@
+<style type='text/css'>
+		/* new banner */
+		div.fraxion_banner * {
+			/* reset values */
+			display:inline;
+			max-width:none;
+			margin: 0;
+			border: 0;
+			outline: 0;
+			font-size: 100%;
+			vertical-align: baseline;
+			background: transparent;
+			clear:none;
+			/* CSS 3.0 */
+			-moz-box-shadow: none;
+			-webkit-box-shadow: none;
+			box-shadow: none;
+			}
+		div.fraxion_banner {
+			display:block !important;
+			position: relative;
+			max-width: 530px;
+			font: 11px normal Arial, Helvetica, sans-serif !important;
+			color: #006;
+			}
+		div.fraxion_banner a {
+			color: #006;
+			text-decoration: none !important;
+			border:0px !important;
+			}
+		div.fraxion_banner img {
+			border-width: 0;
+			padding:0px !important;
+			}
+		a.fraxion_logo {
+			display: block;
+			position: absolute;
+			top: 6px;
+			left: 12px;
+			}
+		a.fraxion_paypal_logo {
+			display: block;
+			position: absolute;
+			top: 64px;
+			left: 12px;
+			}
+		
+		div.fraxion_banner>div.banner {
+			display:block !important;
+			background: #EEF;
+			border: 1px solid #AAA;
+			overflow: auto;
+			}
+		div.fraxion_banner>p {
+			margin: 0px !important;
+			text-align: right;
+			font-family:normal Arial, Helvetica, sans-serif !important;
+			font-size: 11px !important;
+			}
+		
+		div.fraxion_banner div.buttongroup {
+			overflow: auto;
+			padding: 6px 0 4px 0px;
+			display:block !important;
+			}
+		div.fraxion_banner>div.banner div.buttongroup {
+			padding-left: 107px;
+			display:block !important;
+			}
+		div.fraxion_banner div.button {
+			float: right;	
+			padding: 0 0 0 20px;
+			}
+		div.fraxion_banner>div.banner div.button {
+			float: left;	
+			padding: 0 20px 0 0;
+			}
+		div.fraxion_banner div.button>* {
+			float: left;	
+			}
+		div.fraxion_banner div.right>*, div.fraxion_banner div.rightdisabled>*, div.fraxion_banner div.rightrecommended>* {
+			float: right;
+			}
+		div.fraxion_banner div.button>a, div.fraxion_banner div.button>span {
+			height: 23px;
+			line-height: 23px;
+			white-space: nowrap;
+			}
+		div.fraxion_banner div.button>a {
+			margin: 0 5px 0 0;
+			padding: 0 5px 0 0;
+			color: #339;
+			text-decoration: none !important;
+			background: url({pluginspath}/images/fraxion_bt_bg.gif) no-repeat right 3px
+			}
+		div.fraxion_banner div.right>a, div.fraxion_banner div.rightdisabled>a, div.fraxion_banner div.rightrecommended>a {
+			padding: 0 0 0 5px;
+			background-position: left 3px;
+			text-decoration: none !important;
+			}
+		div.fraxion_banner div.button>a>img {
+			vertical-align: top;
+			height: 23px;
+			width: 23px;
+			margin: 0 2px 0 0;
+			background-image: url({pluginspath}/images/fraxion_bt_icl_whitebg.gif) no-repeat top left;
+			text-decoration: none !important;
+			}
+		div.fraxion_banner div.right>a>img, div.fraxion_banner div.rightdisabled>a>img, div.fraxion_banner div.rightrecommended>a>img {
+			margin: 0 0 0 2px;
+			text-decoration: none !important;
+			}
+		div.fraxion_banner div.right>a>img {
+			background-image: url({pluginspath}/images/fraxion_bt_icr_whitebg.gif);
+			}
+		div.fraxion_banner>div.banner div.button>a>img {
+			background-image: url({pluginspath}/images/fraxion_bt_icl_bg.gif);
+			}
+		div.fraxion_banner>div.banner div.button>a>img {
+			background-image: url({pluginspath}/images/fraxion_bt_icl_bg.gif);
+			}
+		div.fraxion_banner>div.banner div.right>a>img {
+			background-image: url({pluginspath}/images/fraxion_bt_icr_bg.gif);
+			margin: 0 0 0 2px;
+			}	
+		
+		div.fraxion_banner div.button>p {
+			clear: left;
+			margin: 0px !important;
+			padding: 0 0 0 25px;
+			font-family:normal Arial, Helvetica, sans-serif !important;
+			font-size: 11px !important;
+			}
+		div.fraxion_banner div.right>p, div.fraxion_banner div.rightdisabled>p, div.fraxion_banner div.rightrecommended>p {
+			clear: right;
+			margin: 0px !important;
+			padding: 0 30px 0 0;
+			font-family:normal Arial, Helvetica, sans-serif !important;
+			font-size: 11px !important;
+			}	
+		
+		div.fraxion_banner>div.banner div.disabled>a, div.fraxion_banner>div.banner div.rightdisabled>a {
+			cursor: default;
+			color: #999;
+			background-image: url({pluginspath}/images/fraxion_bt_bg_disabled.gif);
+			text-decoration: none !important;
+			}
+		div.fraxion_banner>div.banner div.disabled>a>img {
+			background-image: url({pluginspath}/images/fraxion_bt_icl_bg_disabled.gif);
+			}
+		div.fraxion_banner>div.banner div.rightdisabled>a>img {
+			background-image: url({pluginspath}/images/fraxion_bt_icr_bg_disabled.gif);
+			}
+		div.fraxion_banner>div.banner div.disabled>p, div.fraxion_banner>div.banner div.rightdisabled>p {
+			color: #c00;
+			font-family:normal Arial, Helvetica, sans-serif !important;
+			font-size: 11px !important;
+			}
+		
+		div.fraxion_banner>div.banner div.recommended>a, div.fraxion_banner>div.banner div.rightrecommended>a {
+			color: #006;
+			background-image: url({pluginspath}/images/fraxion_bt_bg_recommended.gif);
+			text-decoration: none !important;
+			}
+		div.fraxion_banner>div.banner div.recommended>a>img {
+			background-image: url({pluginspath}/images/fraxion_bt_icl_bg_recommended.gif);
+			}
+		div.fraxion_banner>div.banner div.rightrecommended>a>img {
+			background-image: url({pluginspath}/images/fraxion_bt_icr_bg_recommended.gif);
+			}
+</style>
