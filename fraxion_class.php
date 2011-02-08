@@ -1,7 +1,7 @@
 <?php
 
 class FraxionPayments {
-	private $version = '1.3.1';
+	private $version = '1.3.2';
 	public $site_ID;
 	public $plugins_path;
 	private $urls;
