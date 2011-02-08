@@ -3,7 +3,7 @@ Contributors:  GarryCL, DanDare2050, Chris Wilkins
 Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news, newspaper, digital news, books, short stories, online articles
 Requires at least: 2.8.4
 Tested up to: 3.0.4
-Stable tag: 1.2.0
+Stable tag: 1.3.1
 
 "Micropayments for bloggers". Sell articles, short stories for as little as 1c. You set the price. Readers "unlock" with 1 click.
 
@@ -56,6 +56,11 @@ It can only help. With 31,000 journalist laid off in the USA alone over the last
 3. Setting the price of a locked article
 
 == Changelog ==
+
+= 1.3.1 =
+Adds the automatic catalogue system for locked documents.
+Fixes a bug that would allow the content of locked documents to be accessed by web bots.
+More robust handling of content when splicing in the banner.
 
 = 1.2.0 =
 New look and feel for the banners improving usability, including more robust CSS.
@@ -133,6 +138,12 @@ Remove faulty admin button. Replace later.
 The first release. We think most bugs have been solved. But of course please let us know if you find any.
 
 == Upgrade Notice ==
+
+= 1.3.1 =
+Necessary upgrade. Older versions will not be able to change the lock status and fraxion cost for each article.
+Adds the automatic catalogue system for locked documents.
+Fixes a bug that would allow the content of locked documents to be accessed by web bots.
+More robust handling of content when splicing in the banner.
 
 = 1.2.0 =
 New look and feel for the banners improving usability, including more robust CSS. This is a must have upgrade.
