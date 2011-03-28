@@ -1,7 +1,7 @@
 <?php
 
 class FraxionPayments {
-	private $version = '1.3.2';
+	private $version = '1.3.4';
 	public $site_ID;
 	public $plugins_path;
 	private $urls;
@@ -17,13 +17,8 @@ class FraxionPayments {
 	
 	//////////////////
 	public function __construct() {
-		if(function_exists('plugins_url')) {
-			$plugins_url_parts = parse_url(plugins_url('fraxion'));
-			$this->plugins_path = $_SERVER['DOCUMENT_ROOT'] . $plugins_url_parts['path'] . '/';
-			}
-		else {
-			$this->plugins_path = '';
-			}
+		$fraxion_plugin_path = explode('/',__FILE__);
+		$this->plugins_path = implode('/',array_slice($fraxion_plugin_path, 0, -1)) .'/';
 		if(function_exists('get_option') && get_option('fraxion_site_id') != false) {	
 			$this->site_ID = get_option('fraxion_site_id');
 			}
@@ -57,12 +52,6 @@ class FraxionPayments {
 			//self::writeLOG("Frax reply: " . serialize($frax_doc) . " time: " .date("Y-m-d H:i:s") . "\n");
 			return $frax_reply;
 			}
-	//////////////////
-	private function convert_ms_chars($string) {
-		$search = array(chr(145),chr(146),chr(147),chr(148),chr(151),'&acirc;&#128;&#156;','&acirc;&#128;&#157;','&acirc;&#128;&#153;','&acirc;&#128;&#147;','&acirc;&euro;&ldquo;','&#8230;');
-		$replace = array("'","'",'"','"','-','"','"',"'","-","-",'...');
-		return str_replace($search, $replace, $string);
-		}
 	////////////////////
 	private function closetags ($html) {
 			#put all opened tags into an array
@@ -145,7 +134,6 @@ class FraxionPayments {
 			$showFooter = false;
 			$showNotLoggedIn = false;
 			$showLocked = false;
-			//$the_content = convert_chars($the_content);
 			$tag_position = strpos($the_content,$this->the_tag);
 			$hasTag = ($tag_position===false?false:true);
 			$isLocked = false;
@@ -321,7 +309,7 @@ class FraxionPayments {
 		}
 	///////
 		public function admin_css() {
-			echo '<link type="text/css" href="' . plugins_url('fraxion') . '/css/smoothness/jquery-ui.custom.css" rel="stylesheet" />';
+			//echo '<link type="text/css" href="' . plugins_url('fraxion') . '/css/smoothness/jquery-ui.custom.css" rel="stylesheet" />';
 		}
 	///////
 		public function admin_TagButton() {
@@ -465,23 +453,25 @@ class FraxionPayments {
 					echo 'This Post is <strong>' . ($locked=='true'?'locked':'unlocked') . '</strong>&nbsp;|&nbsp;';
 					echo 'Price is <strong>' . $fraxions_cost . '</strong> fraxions';
 					echo '</div>';
-					echo '<div id="fp_login" title="Fraxion Post Details"></div>';
-					echo '<script language="javascript" type="text/javascript">
-							var doClose = function() { jQuery(\'#fp_login\').dialog(\'close\');};
-							var dialogOpts = {
-									modal: true,
-									width: 700,
-									height: 580,
-									autoOpen: false,
-									buttons: { "X Close": doClose },
-									close: function() { jQuery.post("' . plugins_url('fraxion') . '/fraxion_server.php",{"action":"refreshPostPanel","siteID":"'. 
+					echo '
+					<style>
+						#mbox{background-color:#eee; padding:8px; border:2px outset #666;}
+						#mbm{font-family:sans-serif;font-weight:bold;float:right;padding-bottom:5px;}
+						#ol{background-image: url(' . plugins_url('fraxion') . '/images/overlay.png);}
+						.mdDialog {display:none; background-color:#FFF;}
+						#fp_login { background-color:#FFF;}
+					</style>
+					<script language="javascript" type="text/javascript">
+						function mdClosed() {
+						 	jQuery.post("' . plugins_url('fraxion') . '/fraxion_server.php",{"action":"refreshPostPanel","siteID":"'. 
 									$this->site_ID .'","postID":"'. $article_ID .'","userID":"'. $user_ID .
 									'"},function(fraxion_details) { jQuery("#fraxion_details").html("This Post is <strong>"+(fraxion_details.locked=="true"?"locked":"unlocked")+"</strong>&nbsp;|&nbsp;Price is <strong>"+fraxion_details.cost+"</strong> fraxions");jQuery("#locked").html(fraxion_details.locked);jQuery("#permit").html(fraxion_details.permit);jQuery("#cost").html(fraxion_details.cost)},"json");}
-									};
-									jQuery(\'#fp_login\').dialog(dialogOpts);</script>';
-					echo '<a href="#" title="Fraxion Payments Edit Post Details" onclick="jQuery(\'#fp_login\').html(\'<iframe></iframe>\').dialog(\'open\');jQuery(\'#fp_login iframe\').attr({\'width\':\'100%\',\'height\':\'100%\',\'src\':\'' . 
+					</script>';
+					echo '<div id="box" class="mdDialog"><div id="fp_login" title="Fraxion Post Details"></div><br /><button onclick="hm(\'box\');mdClosed();">&nbsp;Close&nbsp;</button></div>';
+					echo '<a href="#" title="Fraxion Payments Edit Post Details" onclick="jQuery(\'#fp_login\').html(\'<iframe></iframe>\');jQuery(\'#fp_login iframe\').attr({\'width\':\'100%\',\'height\':\'460\',\'src\':\'' . 
 								$this->urls['editpostinfo'] . '?confid=0&sid='.$this->site_ID.'&uid_wp='.$user_ID.'&aid='.$article_ID.'&atitle=' . 
-								urlencode($post_title) . '&cost=\'+jQuery(\'#cost\').html()+\'&lock=\'+jQuery(\'#locked\').html()+\'&permit=\'+jQuery(\'#permit\').html()+\'\'});">Change</a>';
+								urlencode($post_title) . '&cost=\'+jQuery(\'#cost\').html()+\'&lock=\'+jQuery(\'#locked\').html()+\'&permit=\'+jQuery(\'#permit\').html()+\'\'});initmb(); sm(\'box\',700,520);">Change</a>';
+
 					echo '<div id="valpermit"></div>';
 					}
 				}
