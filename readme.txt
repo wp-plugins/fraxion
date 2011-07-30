@@ -2,8 +2,8 @@
 Contributors:  GarryCL, DanDare2050, Chris Wilkins
 Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news, newspaper, digital news, books, short stories, online articles
 Requires at least: 2.8.4
-Tested up to: 3.1.0
-Stable tag: 1.3.4
+Tested up to: 3.2.1
+Stable tag: 1.3.5
 
 "Micropayments for bloggers". Sell articles, short stories for as little as 1c. You set the price. Readers "unlock" with 1 click.
 
@@ -57,6 +57,10 @@ It can only help. With 31,000 journalist laid off in the USA alone over the last
 
 == Changelog ==
 
+= 1.3.5 =
+Path Separators defined for Windows server install.
+Comment hiding script at the foot of the page instead of using window.onload() to avoid clashes with other plugins.
+
 = 1.3.4 =
 Repair word press 3.1 problem with JQuery for post info dialog.
 Simultaneous release with the new royalty payment system.
@@ -64,7 +68,7 @@ Allows people other than the site owner to receive payment for sales, as assigne
 
 = 1.3.3 =
 Minor fix to internal directory navigation where subdomain is in use.
-Minor fix for compatabilit with Word Press version 3.1
+Minor fix for compatability with Word Press version 3.1
 
 = 1.3.2 =
 Adds the automatic catalogue system for locked documents.
@@ -149,6 +153,10 @@ Remove faulty admin button. Replace later.
 The first release. We think most bugs have been solved. But of course please let us know if you find any.
 
 == Upgrade Notice ==
+
+= 1.3.5 =
+This version of the plugin is required if you are running you Wordpress on a windows server.
+SOme of the page script functions have been changed to avoid clashes with other plugins and themes.
 
 = 1.3.4 =
 Repair word press 3.1 problem with JQuery for post info dialog.

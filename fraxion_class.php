@@ -1,7 +1,7 @@
 <?php
 
 class FraxionPayments {
-	private $version = '1.3.4';
+	private $version = '1.3.5';
 	public $site_ID;
 	public $plugins_path;
 	private $urls;
@@ -330,6 +330,9 @@ class FraxionPayments {
 			$this->urls = $settings['urls'];
 			$admin_site_settings_panel = '<div class="wrap">';
 			$admin_site_settings_panel .= '<h3>Fraxion Settings</h3>';
+			if(isset($_GET['vurl'])) {
+				$admin_site_settings_panel .= $this->setSiteID($_GET['vurl']);
+				}
 			if($this->checkSiteStatus() != 'none') {
 				if($_GET['sid']) {
 					update_option('fraxion_site_id',$_GET['sid'] );
@@ -340,7 +343,7 @@ class FraxionPayments {
 					$admin_site_settings_panel .= '<div class="updated"><p><strong>Fraxion Settings Saved :)</strong></p></div>';
 					}
 				$settings = json_decode(str_replace('\n', null, file_get_contents($this->plugins_path . 'javascript/settings.json')), TRUE);
-				$admin_site_settings_panel .= 'Fraxion Payment Admin - <a href="'. $this->urls['admin'] . '?returl=http' . ($_SERVER['HTTPS']?'s':null) . urlencode('://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']) . '&siteurl=' . urlencode(get_option('home')) . '&blogname=' . urlencode(get_option('blogname')) .  '&sid=' . get_option('fraxion_site_id') .  '&uid_wp=' . $user_ID . '&confid=0">Click Here</a><br />';
+				$admin_site_settings_panel .= '<a href="'. $this->urls['admin'] . '?returl=http' . ($_SERVER['HTTPS']?'s':null) . urlencode('://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']) . '&siteurl=' . urlencode(get_option('home')) . '&blogname=' . urlencode(get_option('blogname')) .  '&sid=' . get_option('fraxion_site_id') .  '&uid_wp=' . $user_ID . '&confid=0">Fraxion Payment Admin</a><br />';
 				if (function_exists('get_blog_count')) { ///// is MU //////
 					$blog_details =  get_active_blog_for_user($user_ID);
 					if($blog_details->blog_id == 1) { // is master //
@@ -365,9 +368,9 @@ class FraxionPayments {
 													'&uid_wp=' . $user_ID . '&
 													btitle=' . urlencode($blog_details->blogname) .
 													'&burl=' . urlencode(get_option('home')) .
-													'&base_site_url=' . urlencode(get_blog_option(1,'siteurl')) . 
-													'&returl=http' . ($_SERVER['HTTPS']?'s':null) . urlencode('://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']) . '?page=fpsiteoptions' .
-													'&vurl=' . urlencode(plugins_url('fraxion')) . '/set_site_id.php">Click Here</a><br />';
+													'&base_site_url=' . urlencode(get_blog_option($blog_details->blog_id,'siteurl') . '/') . 
+													'&returl=' . urlencode(get_blog_option($blog_details->blog_id,'siteurl') . '/wp-admin/options-general.php?page=fpsiteoptions') .
+													'&vurl=' . urlencode(get_blog_option($blog_details->blog_id,'siteurl') . '/wp-admin/options-general.php?page=fpsiteoptions') . '">Click Here</a><br />';
 					if($blog_details->blog_id == 1) { // is master //
 						$admin_site_settings_panel .= $status_messages['register_mu_base'];
 						}
@@ -376,12 +379,12 @@ class FraxionPayments {
 						}
 					}
 				else { ///// not MU ///////
-					$admin_site_settings_panel .= 'Register your site with Fraxion Payments - <a href="'. $this->urls['register'] . '?&
+					$admin_site_settings_panel .= 'Register your site with Fraxion Payments - <a href="'. $this->urls['register'] . '?
 													uid_wp=' . $user_ID . 
 													'&btitle=' . urlencode(get_option('blogname')) .'&
 													burl=' . urlencode(get_option('home')) . 
-													'&returl=http' . ($_SERVER['HTTPS']?'s':null) . urlencode('://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']) . 
-													'&vurl=' . urlencode(plugins_url('fraxion')) . '/set_site_id.php">Click Here</a><br />';
+													'&returl=' . urlencode(get_option('home') . '/wp-admin/options-general.php?page=fpsiteoptions') . 
+													'&vurl=' . urlencode(get_option('home') . '/wp-admin/options-general.php?page=fpsiteoptions') . '">Click Here</a><br />';													
 					$admin_site_settings_panel .= $status_messages['register_single'];	
 					}
 				}
@@ -439,7 +442,9 @@ class FraxionPayments {
 						else {
 							$status_message = 'Fraxion Server Error!!!';}
 						}
-				echo "<div id='sid' style='display:none;'>" . $this->site_ID . "</div><div id='uid_wp' style='display:none;'>$user_ID</div><div id='aid' style='display:none'>$article_ID</div><div id='locked' style='display:none;'>$locked</div><div id='cost' style='display:none;'>$fraxions_cost</div><div id='permit' style='display:none;'>$permit</div>";
+				echo "<div id='sid' style='display:none;'>" . $this->site_ID . "</div><div id='uid_wp' style='display:none;'>$user_ID</div>
+							<div id='aid' style='display:none'>$article_ID</div><div id='locked' style='display:none;'>$locked</div>
+							<div id='cost' style='display:none;'>$fraxions_cost</div><div id='permit' style='display:none;'>$permit</div>";
 				echo '<div id="fraxion_details">';
 				if($status_message != "") {
 					echo $status_message;
@@ -476,15 +481,8 @@ class FraxionPayments {
 					}
 				}
 			else {
-				if(empty($this->urls)) {
-					$settings = json_decode(str_replace('\n', null, file_get_contents($this->plugins_path . 'javascript/settings.json')), TRUE);
-					$this->urls = $settings['urls'];
+				echo '<span style="color:red;"><a href="' . get_option('siteurl') . '/wp-admin/options-general.php?page=fpsiteoptions">Register your Site</a></span>';													
 				}
-				echo '<span style="color:red;"><a href="'. $this->urls['register'] . '?uid_wp=' . $user_ID . '&btitle=' . 
-				urlencode(get_option('blogname')) .'&burl=' . urlencode(get_option('home')) . '&site_url=' . urlencode(get_option('home')) . 
-				'&returl=http' . ($_SERVER['HTTPS']?'s':null) . urlencode('://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']) . 
-				'&vurl=' . urlencode(plugins_url('fraxion')) . '/set_site_id.php">Register your Site</a></span>';	
-			}
 			}
 	////////
 		public function refreshPostPanel() {
@@ -611,7 +609,7 @@ class FraxionPayments {
 			return true;
 		}
 	/////////////////
-		public static function setSiteID($confirmurl) {
+		public function setSiteID($confirmurl) {
 			global $table_prefix;
 			$mu_site = false;
 			$blog_id = 0;
@@ -634,12 +632,12 @@ class FraxionPayments {
 				else {
 					$site_ID = substr($site_ID_full,2);
 					}
-				self::setDBDetails();
+				//self::setDBDetails();
 				$db_conn = @mysql_connect(DB_HOST,DB_USER,DB_PASSWORD);
 				$db_db = @mysql_select_db(DB_NAME);
 				// look for blog_id
 				$option_present_result = mysql_query('SELECT Count(*) FROM ' . $table_prefix . $table_blog_id . 'options WHERE option_name = "fraxion_site_id"');
-				if(mysql_result($option_present_result,0,0)>0) {
+				if(@mysql_result($option_present_result,0,0)>0) {
 					$option_result = @mysql_query('UPDATE ' . $table_prefix . $table_blog_id . 'options SET option_value = "' . $site_ID . '" WHERE option_name = "fraxion_site_id"');}
 				else {
 					$option_result = @mysql_query('INSERT INTO ' . $table_prefix . $table_blog_id . 'options (option_name,option_value) Values("fraxion_site_id","' . $site_ID . '")');
@@ -649,7 +647,7 @@ class FraxionPayments {
 			else {
 				$message = $site_ID_full;
 				}
-			return '<html><head><title>Fraxion Payments - Site Registration</title></head><body>Your site has been registered!<br /><br />Site ID: ' . $message . ' has been inserted!<br />Please visit your site admin panel!</body></html>';
+			return 'Your site has been registered!<br /><br />Site ID: ' . $message . ' has been inserted!';
 		}
 }
 ?>

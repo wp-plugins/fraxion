@@ -25,7 +25,7 @@
 "admin_mu_base":"Administer a WP MU base Installation and view sales reports",
 "admin_mu_blog":"Administer a WP MU Blog Site and view sales reports"},
 "urls":{
-"connectacct":"http://java.fraxionpayments.com/frax/connectacct.jsp",
+"connectacct":"http://test.fraxionpayments.com/frax/connectacct.jsp",
 "loginFP":"http://java.fraxionpayments.com/frax/login.jsp",
 "logoutFP":"http://java.fraxionpayments.com/frax/logout",
 "unlock":"http://java.fraxionpayments.com/frax/unlock",
