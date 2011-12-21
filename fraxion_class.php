@@ -1,7 +1,7 @@
 <?php
 
 class FraxionPayments {
-	private $version = '1.3.6';
+	private $version = '1.3.7';
 	public $site_ID;
 	public $plugins_path;
 	private $urls;
@@ -140,6 +140,7 @@ class FraxionPayments {
 			$tag_position = strpos($the_content,$this->the_tag);
 			$hasTag = ($tag_position===false?false:true);
 			$isLocked = false;
+			
 			if($hasTag && $hasSiteID != false) {
 				$article_ID = get_the_ID();
 				$settings = json_decode(str_replace('\n', null, file_get_contents($this->plugins_path . 'javascript/settings.json')), TRUE);
@@ -268,6 +269,7 @@ class FraxionPayments {
 				return $fraxion_content_full;
 				}
 			else { // do nothing
+				$this->fp_post_status = "unlocked";
 				return $the_content;
 				}
 		}
