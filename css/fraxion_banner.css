@@ -47,6 +47,7 @@
 		
 		div.fraxion_banner>div.banner {
 			display:block !important;
+			min-height: 64px;
 			background: #EEF;
 			border: 1px solid #AAA;
 			overflow: auto;
@@ -73,7 +74,7 @@
 			}
 		div.fraxion_banner>div.banner div.button {
 			float: left;	
-			padding: 0 20px 0 0;
+			padding: 0 10px 0 0;
 			}
 		div.fraxion_banner div.button>* {
 			float: left;	

@@ -3,7 +3,7 @@ Contributors:  GarryCL, DanDare2050, Chris Wilkins
 Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news, newspaper, digital news, books, short stories, online articles
 Requires at least: 2.8.4
 Tested up to: 3.2.1
-Stable tag: 1.3.5
+Stable tag: 1.3.6
 
 "Micropayments for bloggers". Sell articles, short stories for as little as 1c. You set the price. Readers "unlock" with 1 click.
 
@@ -56,6 +56,11 @@ It can only help. With 31,000 journalist laid off in the USA alone over the last
 3. Setting the price of a locked article
 
 == Changelog ==
+
+= 1.3.6 =
+Fixed a bug that stopped page production if the Fraxion Payments server was not responding.
+A clean "unavailable" banner is now produced at the lock position.
+Tidied up the setting of window.onload so it plays nice with other scripts that have set it previously.
 
 = 1.3.5 =
 Path Separators defined for Windows server install.
@@ -154,9 +159,15 @@ The first release. We think most bugs have been solved. But of course please let
 
 == Upgrade Notice ==
 
+= 1.3.6 =
+Fixed a bug that stopped page production if the Fraxion Payments server was not responding.
+A clean "unavailable" banner is now produced at the lock position. Internal links from the administration
+end also behave more respectfully.
+Tidied up the setting of window.onload so it plays nice with other scripts that have set it previously.
+
 = 1.3.5 =
 This version of the plugin is required if you are running you Wordpress on a windows server.
-SOme of the page script functions have been changed to avoid clashes with other plugins and themes.
+Some of the page script functions have been changed to avoid clashes with other plugins and themes.
 
 = 1.3.4 =
 Repair word press 3.1 problem with JQuery for post info dialog.

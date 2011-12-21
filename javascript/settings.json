@@ -9,15 +9,19 @@
 "regacct":"<div class='button {class}'><a href='{url_regacct}?returl={returl}'><img src='{site_url}/wp-content/plugins/fraxion/images/fraxion_bt_ic_login.png' alt='' />Not using fraxion yet? Register Now!</a>{message}</div>",
 "viewAccount":"<div class='button {class}'><a href='{viewaccount}?returl={returl}'><img src='{site_url}/wp-content/plugins/fraxion/images/fraxion_bt_ic_settings.png' alt='' />View Account</a>{message}</div>",
 "forgotpswd":"<p><a href='{forgotpswd}?returl={returl}'>Forgot password?</a></p>",
-"whatFrax":"<p><a href='#' onclick='alert(&quot;{whatFrax}&quot;); return false;'>What are fraxions?</a></p>"
+"whatFrax":"<p><a href='#' onclick='alert(&quot;{whatFrax}&quot;); return false;'>What are fraxions?</a></p>",
+"noServ":"<p>{message}</p>"
 },
 "messages":{
 "connectFP":"<p>Login to a Fraxion Payments account to unlock this article</p>",
+"editLock":"Please Connect to Fraxion Payments to edit lock details",
 "needFrax":"<p>You don't have enough fraxions</p>",
 "whatFrax":"Your Fraxion Payments account will have Fraxions stored in it. They cost around 1 US cent each and can be used at any web site that supports the Fraxion Payments system.",
 "logoutFP":"<p>Logged-in as {user_email}</p>",
 "unlock":"<p>{fraxions} fraxions remaining</p>",
-"error":"<p>An unexpected condition has occurred :(</p><p>{error}","noComm":"Cannot communicate with the Fraxion Server!!!</p>",
+"error":"<p>An unexpected condition has occurred :(</p><p>{error}</p>",
+"noComm":"Cannot communicate with the Fraxion Server!!!",
+"noServ":"The Fraxion Payments system is temporarily unavailable. Please try refreshing this page in a few minutes.",
 "register_single":"Register a standalone WP Installation to enable article locking",
 "register_mu_base":"Register the WP MU base installation to enable article locking",
 "register_mu_blog":"Register a WP MU Blog Site to enable article locking",
@@ -25,7 +29,7 @@
 "admin_mu_base":"Administer a WP MU base Installation and view sales reports",
 "admin_mu_blog":"Administer a WP MU Blog Site and view sales reports"},
 "urls":{
-"connectacct":"http://test.fraxionpayments.com/frax/connectacct.jsp",
+"connectacct":"http://java.fraxionpayments.com/frax/connectacct.jsp",
 "loginFP":"http://java.fraxionpayments.com/frax/login.jsp",
 "logoutFP":"http://java.fraxionpayments.com/frax/logout",
 "unlock":"http://java.fraxionpayments.com/frax/unlock",
