@@ -2,8 +2,8 @@
 Contributors:  GarryCL, DanDare2050, Chris Wilkins
 Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news, newspaper, digital news, books, short stories, online articles
 Requires at least: 2.8.4
-Tested up to: 3.2.1
-Stable tag: 1.3.7
+Tested up to: 3.3.1
+Stable tag: 1.3.8
 
 "Micropayments for bloggers". Sell articles, short stories for as little as 1c. You set the price. Readers "unlock" with 1 click.
 
@@ -56,6 +56,10 @@ It can only help. With 31,000 journalist laid off in the USA alone over the last
 3. Setting the price of a locked article
 
 == Changelog ==
+
+= 1.3.8 =
+Important Adjustments for Wordpress 3.3.1 Fraxion button was not appearing in the HTML editor.
+
 = 1.3.7 =
 Fixed bug that closes comments on posts that are not tagged.
 
@@ -161,8 +165,8 @@ The first release. We think most bugs have been solved. But of course please let
 
 == Upgrade Notice ==
 
-= 1.3.7 =
-Fixed bug that closes comments on posts that are not tagged.
+= 1.3.8 =
+Important Adjustments for Wordpress 3.3.1 If you have Wordpress 1.3.1 you need this plugin update.
 
 = 1.3.6 =
 Fixed a bug that stopped page production if the Fraxion Payments server was not responding.

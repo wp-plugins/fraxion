@@ -1,7 +1,7 @@
 <?php
 
 class FraxionPayments {
-	private $version = '1.3.7';
+	private $version = '1.3.8';
 	public $site_ID;
 	public $plugins_path;
 	private $urls;
@@ -334,7 +334,7 @@ class FraxionPayments {
 		}
 	///////
 		public function admin_TagButton() {
-			echo '<script language="javascript" type="text/javascript">jQuery(document).ready(function() {if(jQuery("#post").html()!="") {jQuery("#ed_toolbar").append("<input type=\'button\' class=\'ed_button\' onclick=\'fppos=0;contents=\"\";fppos=document.getElementById(\"content\").selectionStart;contents=getElementById(\"content\").value;getElementById(\"content\").value=contents.substring(0,fppos)+\"' . $this->the_tag . '\"+contents.substring(fppos);\' title=\'Insert Fraxion lock tag\' value=\'fraxion\' />");}});</script>';
+			echo '<script language="javascript" type="text/javascript">function setToolbarButton() {jQuery("#ed_toolbar").append("<input type=\'button\' class=\'ed_button\'  id=\'qt_content_fraxion_tag\' onclick=\'fppos=0;contents=\"\";fppos=document.getElementById(\"content\").selectionStart;contents=getElementById(\"content\").value;getElementById(\"content\").value=contents.substring(0,fppos)+\"' . $this->the_tag . '\"+contents.substring(fppos);\' title=\'Insert Fraxion lock tag\' value=\'fraxion\' />");}; jQuery(document).ready(function() {setTimeout("setToolbarButton()", 2000);});</script>';
 			}
 	///////
 		public function admin_Menu() {
@@ -596,7 +596,7 @@ class FraxionPayments {
 					$this->fp_post_status = "locked";
 					$cost = $reply->item(0)->getAttribute('cost'); }
 				else {
-					$this->fp_post_status = "unlocked";
+					$this->fp_post_status = 'unlocked';
 					$cost = 0; }
 				}
 			else {
