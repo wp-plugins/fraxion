@@ -1,0 +1,22 @@
+{
+	"messages":{
+		 "account_info":"{email} has {fraxions} fraxions"
+		,"catalogue_alt":"View a searchable catalogue of content in the Fraxion network."
+		,"catalogue_label":"Catalogue"
+		,"forgot_pwd_label":"Forgot password..."
+		,"login_fp_alt":"Login to a Fraxion account to see this article in full."
+		,"login_fp_label":"Login..."
+		,"logout_fp_alt":"Logout from Fraxion."
+		,"logout_fp_label":"Logout"
+		,"purchase_alt":"Get more fraxions into your account."
+		,"purchase_label":"Get fraxions..."
+		,"reg_acct_alt":"Register a new Fraxion account to see this article in full. You will be asked for an email address and a password you want to use."
+		,"reg_acct_label":"Register..."
+		,"unlock_disabled_alt":"Get more fraxions to be able to unlock this content."
+		,"unlock_disabled_label":"Unlock... <strong>{cost}</strong> fraxions."
+		,"unlock_alt":"Unlock to view the full content."
+		,"unlock_label":"Unlock... <strong>{cost}</strong> fraxions."
+		,"view_account_alt":"View your account, change password and email address, view reports."
+		,"view_account_label":"View Account"
+	}
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Upload Locked Resource - Fraxion Payments</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/styles/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles/bootstrap-responsive.min.css" rel="stylesheet">
+    <script type='text/javascript' src='http://code.jquery.com/jquery-1.9.1.min.js'></script>
+    <script type='text/javascript' src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<h3>Upload</h3>
+<strong>Select files to upload: </strong><br /><br />
+<div class='row-fluid'  align="centre">
+	<form action="/index.php" class='form-search span6' method="post"
+	                        enctype="multipart/form-data">
+	<input type="hidden" name="forPostId" value="{postId}" /><!-- Rhondas Song post -->
+	<div class='row-fluid'>
+		<div class='input-append span3'>
+			<label for="file1">Full File:</label> <input type="file" name="file1" size="50" class='span3 search-query'
+                       placeholder='Full File'/><br/>
+				<span style="font-size:.7em; color:#999999">Complete file to diliver when unlocked.</span><br/><br/>
+			<label for="file2">Snippet :</label> <input type="file" name="file2" size="50" class='span3 search-query'
+                       placeholder='Snippet'/><br/>
+				<span style="font-size:.7em; color:#999999">Short version to deliver when not unlocked.</span><br/><br/>
+			<input type="checkbox" name="force" value="true"  class='span3 search-query'
+						placeholder='Force selected file to download?' checked="checked" /> <label for="force">Force selected file to download?</label><br/>
+				<span style="font-size:.7em; color:#999999">Allways download the file when its link is clicked.</span><br/><br/>
+			<button type="submit" name="frax_new_resource" class='btn' align="right">Upload File</button>
+		</div>
+	</div>
+	</form>
+</div>
+<ul style="font-size:.7em; color:#999999">
+<li>The new URL will be constructed from the file name of the full file.</li>
+<li>The name must be unique for your web site.
+<li>File names, with extensions, are limited to &lt; 50 characters</li>
+</ul>
+</body>
+</html>

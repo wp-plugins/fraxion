@@ -7,7 +7,7 @@
 			while (message && message.nodeType != 1);
 			message.innerHTML = "To leave comments please unlock this post.";
 			document.getElementById("commentform").innerHTML = "";
-			}
 		}
+	}
 	window.onload = function() { showRespond(sShowRespond); }
 </script>

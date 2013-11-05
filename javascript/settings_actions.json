@@ -1,0 +1,14 @@
+{
+"actions":{
+"account_info":"<div class='account_info'>{info}</div>"
+,"catalogue":"<div class='fxbutton right catalogue'><a href='{catalogue_url}'>{catalogue_label}</a></div>"
+,"login_fp":"<div class='fxbutton {class}'><a href='{login_fp_url}'>{login_fp_label}</a></div>"
+,"logo":"<div class='frax_logo'><a class='fraxion_logo' href='http://www.fraxionpayments.com' ><img src='{image_path}fraxion_x_logo.gif' alt='Fraxion' /></a></div>"
+,"logout_fp":"<div class='fxbutton {class}'><a href='{logout_fp_url}'>{logout_fp_label}</a></div>"
+,"purchase":"<div class='fxbutton {class}'><a href='{purchase_url}'>{purchase_label}</a></div>"
+,"reg_acct":"<div class='fxbutton {class}'><a href='{reg_acct_url}'>{reg_acct_label}</a></div>"
+,"unlock":"<div class='fxbutton {class}'><a href='{url_unlock}' class='unlock'>{unlock_label}</a></div>"
+,"unlock_disabled":"<div class='fxbutton {class}'><a href='#' onclick='return false;' class='unlock'>{unlock_disabled_label}</a></div>"
+,"view_account":"<div class='fxbutton {class}'><a href='{view_acct_url}'>{view_acct_label}</a></div>"
+}
+}
