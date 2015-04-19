@@ -3,7 +3,6 @@ include ("fraxion_url_sender_interface.php");
 class FraxionURLSenderImpl implements FraxionURLSender {
 	public function sendFraxURL(
 			$frax_request) {
-		$frax_doc = '';
 		$cFraxion = curl_init ();
 		curl_setopt ( $cFraxion, CURLOPT_URL, $frax_request );
 		curl_setopt ( $cFraxion, CURLOPT_RETURNTRANSFER, true );

@@ -13,15 +13,14 @@ class FraxionResourceController {
 	public function __construct(
 			FraxionArticleLogic $fraxionArticleLogic, 
 			FraxionResourceService $fraxionResourceService) {
+		$this->logger = FraxionLoggerImpl::getLogger ( "FraxionResourceController" );
+		$this->logger->writeLOG( "[__construct]");
 		if ($fraxionArticleLogic == null)
 			FraxionErrorPageImpl::fatalError ( "fraxionArticleLogic is null", $this->logger );
 		if ($fraxionResourceService == null)
 			FraxionErrorPageImpl::fatalError ( "fraxionResourceService is null", $this->logger );
 		$this->fraxionArticleLogic = $fraxionArticleLogic;
 		$this->fraxionResourceService = $fraxionResourceService;
-		
-		$this->logger = FraxionLoggerImpl::getLogger ( "FraxionResourceController" );
-		$this->logger->writeLOG( "[__construct]");
 	} // end __construct
 	
 	/**
@@ -37,7 +36,7 @@ class FraxionResourceController {
 	public function my_plugin_query_vars(
 			$vars) {
 		// action names
-		$vars [] = 'frax_resource';
+		$vars [] = 'frax_resource'; // get resource by name given
 		$vars [] = 'frax_res_list_for_post';
 		$vars [] = 'frax_new_resource';
 		$vars [] = 'frax_upload_resource_form';
@@ -49,6 +48,9 @@ class FraxionResourceController {
 		$vars [] = 'forPostId';
 		$vars [] = 'force';
 		$vars [] = 'for_name';
+
+		$vars [] = 'snip'; // action:frax_resource - true if only snippet should download
+		$vars [] = 'inline'; // action:frax_resource - true if override force download
 		
 		return $vars;
 	}
@@ -85,6 +87,7 @@ class FraxionResourceController {
 				
 				$form_content = file_get_contents ( PluginsPathImpl::get () . 'html/' . 'fraxion_upload_resource_form.html' );
 				$form_content = str_replace ( '{postId}', $postid, $form_content );
+				$form_content = str_replace ( '{site_url}',get_site_url(), $form_content );
 
 				echo $form_content;
 				
@@ -111,7 +114,7 @@ class FraxionResourceController {
 		echo '<p>Attached file name is <strong>' . $theName . '</strong></p>';
 		echo '<p>Copy the following code into your content to make a link to this file.</p>';
 		echo '<form><textarea rows="2" cols="50">';
-		echo '<a href="/index.php?frax_resource=' . $theName . '">' . $theName . '</a>';
+		echo '<a href="'.get_site_url().'/index.php?frax_resource=' . $theName . '">' . $theName . '</a>';
 		echo '</textarea></form>';
 		echo '</body></html>';
 	}
@@ -139,18 +142,20 @@ class FraxionResourceController {
 					$this->logger );
 		}
 		// both files have same extension
-		$fullVersExtension = end ( explode ( ".", $_FILES ["file1"] ["name"] ) );
+		$f1name = $_FILES["file1"]["name"];
+		$fullVersExtension = end( explode( ".", $f1name ) );
 		if (empty ( $fullVersExtension )) {
 			FraxionErrorPageImpl::clientError (
 					"Missing Extension",
-					"File name " . $_FILES ["file1"] ["name"] . " has no file type extension (e.g. JPEG).", 
+					"File name " . $_FILES["file1"]["name"] . " has no file type extension (e.g. JPEG).", 
 					$this->logger );
 		}
-		$snipVersExtension = end ( explode ( ".", $_FILES ["file2"] ["name"] ) );
+		$f2name = $_FILES["file2"]["name"];
+		$snipVersExtension = end( explode( ".", $f2name ) );
 		if (empty ( $snipVersExtension )) {
 			FraxionErrorPageImpl::clientError (
 					"Missing Extension",
-					"File name " . $_FILES ["file2"] ["name"] . " has no file type extension (e.g. JPEG).", 
+					"File name " . $_FILES["file2"]["name"] . " has no file type extension (e.g. JPEG).", 
 					$this->logger );
 		}
 		if ($fullVersExtension != $snipVersExtension) {
@@ -393,7 +398,11 @@ class FraxionResourceController {
 		$this->logger->writeLOG( "doGetFraxResource -- start");
 		$results = $this->fraxionResourceService->getResourceEntryByName ( $wp->query_vars ['frax_resource'] );
 		if ($results != null) {
-			$showFullVersion = self::isShowFullResource ( $results [0]->resource_post_ID ); // (rand(1,2) == 2);
+			if (array_key_exists ( 'snip', $wp->query_vars )) { // snip param forces snippet version
+				$showFullVersion = false;
+			} else {
+				$showFullVersion = self::isShowFullResource ( $results [0]->resource_post_ID );
+			}
 			$forceDownload = false;
 			$forceFilename = null;
 			$filePath = self::getFraxResourceDirPath () . DIRECTORY_SEPARATOR;
@@ -411,7 +420,8 @@ class FraxionResourceController {
 				$filename = $filename . 'full';
 				$mimetype = $results [0]->resource_mime_type;
 			} else {
-				if ($results [0]->download_snippet_filename != null) {
+				if ($results [0]->download_snippet_filename != null
+						&& ! array_key_exists ( 'inline', $wp->query_vars )) { // inline param overrides download
 					$forceDownload = true;
 					$forceFilename = $results [0]->download_snippet_filename;
 				}
@@ -458,11 +468,14 @@ class FraxionResourceController {
 	private function ensureResourceDirectory(
 			$rootDirPath, 
 			$resID) {
-		if (! is_dir ( $rootDirPath ))
-			FraxionErrorPageImpl::fatalError ( 'no directory for rootDirPath=' . $rootDirPath, $this->logger );
-		if ($resID == null)
+		if (empty($rootDirPath)) {
+			FraxionErrorPageImpl::fatalError ( 'rootDirPath is empty', $this->logger );
+		}
+		if ($resID == null) {
 			FraxionErrorPageImpl::fatalError ( 'no resID provided', $this->logger );
-			
+		}
+		self::ensureDirectory($rootDirPath);
+		
 			// error if root is null or not a folder
 		$currentLocationPath = $rootDirPath;
 		$resIDString = "" . $resID;

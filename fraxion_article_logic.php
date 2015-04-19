@@ -26,8 +26,9 @@ class FraxionArticleLogic {
 	public function isArticleUnlockedForUser(
 			$theFUT, 
 			$postId) {
-		
-		$this->logger->writeLOG( 'isArticleUnlockedForUser theFUT=' . $theFUT . ' postId=' . postId);
+		if ($this->logger->isDebugThis()) {
+			$this->logger->writeLOG( 'isArticleUnlockedForUser theFUT=' . $theFUT . ' postId=' . $postId);
+		}
 		
 		$isUnlocked = false;
 		$frax_dom = $this->fraxionService->get ( $this->urlProvider->getStatFutUrl ( $theFUT, $postId ) );

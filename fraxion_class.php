@@ -1,33 +1,41 @@
 <?php
 class FraxionPayments {
 	private $fraxionService; // Object to handle requests to the fraxion server.
-	private $bannerWriter; // Object to render banner html
+//	private $bannerWriter; // Object to render banner html
 	private $urlProvider; // Object to provide URLs to fraxion services
-	private $fraxion_site_id; // Id given to this site when registered with Fraxion.
-	private $fut; // Fraxion User Token that identifies the current user session to the fraxion user session.
+	private $languageProvider; // Object to provide pluggable text in some language by index
+	private $FUTService; // Object to handle Fraxion User Tokens
 	private $logger = null;
-	private $fraxOld;
+	private $lockSet = false;
 	private $fp_post_status = "locked";
 	private $const_the_tag = '[frax09alpha]'; // The tag in the content where the banner cuts in
 	private $const_option_fraxion_site_id = 'fraxion_site_id'; // The database option name for the saved Site Id given at
 	                                                           // registration.
-	private $const_cookie_name_fraxion_fut = 'fraxion_fut'; // index to the fut value in the cookie.
-	private $const_option_fraxion_resf_id = 'fraxion_resf_id'; // postfix for resource folder
+//	private $const_option_fraxion_resf_id = 'fraxion_resf_id'; // postfix for resource folder
+	private static $const_version = '2.1.0';
+	private $fraxion_site_id; // Id given to this site when registered with Fraxion.
 	
+	public static function getVersion() {
+		return self::$const_version;
+	}
 	/**
 	 * Class constructor sets up basic variables.
 	 */
 	public function __construct(
 			FraxionService $fraxionService, 
-			FraxionBannerWriter $bannerWriter, 
 			FraxionURLProvider $urlProvider, 
-			FraxionPaymentsOld $fraxOld) {
+			FraxionLanguageProvider $languageProvider,
+			FUTServiceImpl $FUTService) {
 		$this->fraxionService = $fraxionService;
-		$this->bannerWriter = $bannerWriter;
+		//			FraxionBannerWriter $bannerWriter, 
+//		$this->bannerWriter = $bannerWriter;
+		$this->languageProvider = $languageProvider;
 		$this->urlProvider = $urlProvider;
-		$this->fraxOld = $fraxOld;
+		$this->FUTService = $FUTService;
 		$this->logger = FraxionLoggerImpl::getLogger ( "FraxionPayments" );
-		$this->logger->writeLOG( '[__construct]');
+		if ($this->logger->isDebug()) {
+			$this->logger->writeLOG( '[__construct]');
+		}
 		self::loadSiteId ();
 	} // end __construct
 	
@@ -42,88 +50,31 @@ class FraxionPayments {
 		}
 	} // end loadSiteId
 	
-	public function refreshPostPanel() {
-		return $this->fraxOld . refreshPostPanel ();
+	public function is_show_comments($open, $content) {
+		if ($this->fp_post_status == "locked" && $this->lockSet) {
+			return false;
+		} else {
+			return $open;
+		}
+	}
+	public function insert_enter_comments_footnote($content) {
+		if (!is_feed() && !is_home() && $this->fp_post_status == "locked") {
+			$content .= "<div><h3>To leave comments please unlock this post</h3></div>";
+		}
+		return $content;
 	}
 	
-	public function fraxion_respond() {
-		echo ('
-			<script language="javascript" type="text/javascript">
-				function showRespond(status) {
-					if(status=="locked" && document.getElementById("commentform")) {
-						var message = document.getElementById("commentform");
-						do message = message.previousSibling;
-						while (message && message.nodeType != 1);
-						message.innerHTML = "To leave comments please unlock this post.";
-						document.getElementById("commentform").innerHTML = "";
-					}
-				}
-				window.onload=function(){showRespond("' . $this->fp_post_status . '");};
-			</script>'
-		);
-	} // end fraxion_respond
-	
-	/**
-	 * The init function calls this at the start of a page.
-	 */
-	public function checkFUT() {
-		$this->logger->writeLOG( '[checkFUT] User Agent: ' . $_SERVER ['HTTP_USER_AGENT'] . ' : fraxion_site_id:' . $this->fraxion_site_id);
+	private function setLockStatus($the_content) {
 		
-		
-		if (! (is_robots () || is_feed () || is_trackback () || is_404 ()) && strpos ( $_SERVER ['HTTP_USER_AGENT'], 
-				'XML-Sitemaps' ) === false) {
-			if ($this->fraxion_site_id != NULL) { // Registered site
-				$this->logger->writeLOG( '[checkFUT] fraxion_site_id=' . $this->fraxion_site_id);
-				$renew_fut = false;
-				if (array_key_exists ( $this->const_cookie_name_fraxion_fut, $_COOKIE )) {
-					$this->fut = $_COOKIE [$this->const_cookie_name_fraxion_fut];
-					$this->logger->writeLOG( 'Cur FUT:' . $this->fut );
-						// TODO only test the fut if more than a few seconds has passed
-					$fut_dom = $this->fraxionService->get ( $this->urlProvider->getStatFutUrl ( $this->fut ) );
-					if ($fut_dom->getElementsByTagName ( 'reply' ) != null && $fut_dom->getElementsByTagName ( 'reply' ) != false) {
-						$reply = $fut_dom->getElementsByTagName ( 'reply' );
-						if ($reply->item ( 0 ) && $reply->item ( 0 )->hasAttribute ( 'futinvalid' ) && $reply->item ( 
-								0 )->getAttribute ( 'futinvalid' ) == 'true') {
-							$renew_fut = true; // reply was that fut was invalid and so it needs renewing
-						} else { // leave fut in the cookie as is and bump up its live time
-							setcookie ( "fraxion_fut", $this->fut, time () + 36000, '/' );
-						}
-					} else { // No good reply - site down?
-						$this->fut = null;
-					}
-				} else { // no known FUT
-					$renew_fut = true;
-				}
-				if ($renew_fut) { // get a new FUT to put in the cookies for this session, then redirect to confirm the FUT
-				                 // via a fraxion session.
-					$fut_dom = $this->fraxionService->getNewFUT ( $this->fraxion_site_id );
-					$reply = $fut_dom->getElementsByTagName ( 'reply' );
-					if ($reply->length > 0) {
-						$this->fut = $reply->item ( 0 )->nodeValue; // Actual FUT value is content of reply tag.
-						$returnURL = 'http://' . $_SERVER ['SERVER_NAME'] . $_SERVER ['REQUEST_URI']; // Call back to the
-						                                                                            // initial request
-						$redirectHeader = 'Location: ' . $this->urlProvider->getGetConfirmFutUrl ( $this->fut, 
-								$returnURL );
-						$this->logger->writeLOG( 'redirectHeader:' . $redirectHeader);
-						setcookie ( "fraxion_fut", $this->fut, time () + 36000, '/' );
-						header ( $redirectHeader );
-						exit ( 0 ); // stop processing and send the redirect
-					} else { // No good reply - site down?
-						$this->fut = null;
-					}
-				} // end if $renew_fut
-			}
-		} else { // Its a bot - no login banner always
-			$this->bot = true;
-		}
-	} // end checkFUT
-	
+	}
+
 	/**
 	 * See if a banner is required, get it from fraxion payments and insert into the content.
 	 * $the_content the article content
 	 */
 	public function push_banner(
 			$the_content) {
+		$this->lockSet = true;
 		$tag_position = strpos ( $the_content, $this->const_the_tag );
 		$hasTag = ($tag_position === false ? false : true);
 		if ($hasTag) {
@@ -131,89 +82,87 @@ class FraxionPayments {
 			if (! empty ( $this->fraxion_site_id )) {
 				return self::push_banner_to_tagged_content ( $the_content, $tag_position );
 			} else { // Unregistered site
-				$loggedIn = false;
-				$frax_dom = $this->fraxionService->get ( $this->urlProvider->getGetFutUrl ( $this->fraxion_site_id ) );
-				$reply = $frax_dom->getElementsByTagName ( 'reply' );
-				if ($reply->length > 0) { // not error
-					if ($reply->item ( 0 )->hasAttribute ( 'isLoggedIn' )) {
-						$loggedIn = $reply->item ( 0 )->getAttribute ( 'isLoggedIn' ) == 'true';
-					}
-				}
-				$banner_content = $this->bannerWriter->getSiteNotRegisteredBanner ( $loggedIn );
+				$banner_content = "<div>Site not registered</div>";
 				return self::insert_banner_at_tag ( $the_content, $tag_position, $banner_content );
 			}
-		} else {
+		} else { // Doesn't have a tag so it is unlocked with no fraxion banner present
 			$this->fp_post_status = "unlocked";
 			return $the_content;
 		}
 	} // end push_banner
 	
 	/**
-	 * Add a banner to the content, which has a tag at the given position.
+	 * Build a banner with no functionality that simply displays the message.
+	 */
+	private function getSimpleMessageBanner($message) {
+		$site_url = get_bloginfo ( 'wpurl' );
+		
+		$banner_content = file_get_contents ( PluginsPathImpl::get () . 'html/' . 'fraxion_banner_simple_message.html' );
+		$banner_content = str_replace ( '{site_url}', $site_url, $banner_content );
+		$banner_content = str_replace ( '{version}', self::$const_version, $banner_content );
+		$banner_content = str_replace ( '{message}', $message, $banner_content );
+		return $banner_content;
+	} // end getSimpleMessageBanner
+	
+	/**
+	 * Get the html for a banner explaining that the Fraxion service is currently unavailable.
+	 */
+	public function getNoServiceBanner() {
+		return self::getSimpleMessageBanner ( $this->languageProvider->getNoServerMessage() );
+	} // end getNoServiceBanner
+	
+	/**
+	 * Add a banner to the content, which has a tag at the given character position.
 	 */
 	private function push_banner_to_tagged_content(
 			$the_content, 
 			$tag_position) {
-		$banner_content = "[OOPS]";
-		$showAsFooter = false;
 		$article_ID = get_the_ID ();
-		$frax_dom = $this->fraxionService->get ( $this->urlProvider->getStatFutUrl ( $this->fut, $article_ID ) );
-		$reply = $frax_dom->getElementsByTagName ( 'reply' );
-		if ($reply->length > 0) { // not error
-			$rItem0 = $reply->item ( 0 );
-			if ($rItem0->hasAttribute ( 'lock' ) && $rItem0->getAttribute ( 'lock' ) == 'true') {
-				// Article is locked for this user
-				if ($rItem0->hasAttribute ( 'isLoggedIn' ) && $rItem0->getAttribute ( 'isLoggedIn' ) == 'true') { // User loggedin
-					$this->logger->writeLOG( 'push_banner_to_tagged_content show locked and logged in:');
-					if ($rItem0->getAttribute ( 'mayunlock' ) == 'true') { // logged-in - locked - enough fraxions
-						$banner_content = $this->bannerWriter->getUserLoggedInLockFraxOkBanner ( 
-								$this->fraxion_site_id, $this->fut, self::getRequestURL (), $article_ID, 
-								$rItem0->getAttribute ( 'cost' ), $rItem0->getAttribute ( 'fraxions' ), 
-								$rItem0->getAttribute ( 'email' ) );
-					} else { // Not enough fraxions to unlock this
-						$banner_content = $this->bannerWriter->getUserLoggedInLockFewFraxBanner ( 
-								$this->fraxion_site_id, $this->fut, self::getRequestURL (), $article_ID, 
-								$rItem0->getAttribute ( 'cost' ), $rItem0->getAttribute ( 'fraxions' ), 
-								$rItem0->getAttribute ( 'email' ) );
-					}
-				} else { // not logged-in show login and register
-					$banner_content = $this->bannerWriter->getUserNotLoggedInBanner ( self::getRequestURL () );
-				}
-			} else { // Article is not locked
-				if ($rItem0->hasAttribute ( 'isFraxioned' ) && $rItem0->getAttribute ( 'isFraxioned' ) == 'true') { // User has
-				                                                                                             // properly unlocked
-					$showAsFooter = true;
-					$this->fp_post_status = "unlocked";
-					$this->logger->writeLOG( 'push_banner_to_tagged_content show is fraxioned i.e. logged in and unlocked');
-					$banner_content = $this->bannerWriter->getUserLoggedInNotLockedBanner ( $this->fraxion_site_id, 
-							$this->fut, self::getRequestURL (), $rItem0->getAttribute ( 'fraxions' ), 
-							$rItem0->getAttribute ( 'email' ) );
-				} else { // Article is not registered yet
-					$userIsLoggedIn = ($rItem0->hasAttribute ( 'isLoggedIn' ) && $rItem0->getAttribute ( 'isLoggedIn' ) == 'true');
-					$banner_content = $this->bannerWriter->getArticleNotRegisteredBanner ( $userIsLoggedIn );
-				}
-			}
-		} else { // not reply hence error
-			$error = $frax_dom->getElementsByTagName ( 'error' );
-			if ($error->length > 0) {
-				$errorMessage = $error->item ( 0 )->firstChild->nodeValue;
-				if ($errorMessage == 'noServ') {
-					$banner_content = $this->bannerWriter->getNoServiceBanner ();
-				} else {
-					$banner_content = $this->bannerWriter->getServiceErrorBanner ( $errorMessage );
-				}
-			} else { // got no error information. Lets be a bit generic
-				$banner_content = $this->bannerWriter->getNoServiceBanner ();
-			}
+		$returnURL = urlencode( self::getRequestURL() );
+		if ($this->FUTService->getFUT() === null) {
+			$this->logger->writeLOG('[push_banner_to_tagged_content] FUT NOT SET!!! ');
 		}
-		if ($showAsFooter) {
+			// call to new get frax banner
+		$banner_url_complete = $this->urlProvider->getBannerUrl ( $this->fraxion_site_id, $article_ID, $this->FUTService->getFUT(), $returnURL );
+		$bannerXML = $this->fraxionService->getSimpleXML ( $banner_url_complete );
+		if ($this->logger->isDebug()) {
+			$this->logger->writeLOG('[push_banner_to_tagged_content] URL ' . $banner_url_complete);
+			$this->logger->writeLOG('Reply: ' . (isset ($bannerXML) ? $bannerXML->asXML() : 'null') );
+		}
+		$banner_content = $this->get_banner_content($bannerXML);
+		if ($this->is_banner_for_footer($bannerXML)) {
+			$this->fp_post_status = "unlocked";
 			return self::insert_banner_at_foot ( $the_content, $banner_content );
 		} else {
 			return self::insert_banner_at_tag ( $the_content, $tag_position, $banner_content );
 		}
 	} // end push_banner_to_tagged_content
 	
+	private function get_banner_content($bannerXML) {
+		$banner_content = '';
+		if (isset ($bannerXML)) {
+			$banner_content = $bannerXML; // Content of the main tag <reply>
+		} else {
+			$banner_content = $this->getNoServiceBanner ();
+		}
+		return $banner_content;
+	}
+	private function is_banner_for_footer($bannerXML) {
+		$showAsFooter = false;
+		if (isset ($bannerXML)) {
+			// read the attributes
+			foreach($bannerXML->attributes() as $name => $value) {
+				if ($name == 'status') {
+					$showAsFooter = ($value != 'locked');
+				}
+			}
+		}
+		return $showAsFooter;
+	}
+	
 	/**
+	 * Chop the content at the tag position, closing off open html tags, and append the banner content.
+	 * The whole thing is wrapped in a div with an id based on the article ID ( 'fraxion_post_content_xxx').
 	 */
 	private function insert_banner_at_tag(
 			$the_content, 
@@ -224,6 +173,8 @@ class FraxionPayments {
 	}
 	
 	/**
+	 * Remove the fraxion tag and put the banner at the end of the content.
+	 * The whole thing is wrapped in a div with an id based on the article ID ( 'fraxion_post_content_xxx').
 	 */
 	private function insert_banner_at_foot(
 			$the_content, 
@@ -285,12 +236,24 @@ class FraxionPayments {
 		echo ('<link rel="stylesheet" href="' . plugins_url ( 'css/fraxion_banner.css', __FILE__ ) . '" type="text/css" />');
 	}
 	
+	private static function sendConfirmSiteURLGetReply( $confirmurl	) {
+		// / get site_ID
+		$cFraxion = curl_init ();
+		curl_setopt ( $cFraxion, CURLOPT_URL, $confirmurl );
+		curl_setopt ( $cFraxion, CURLOPT_RETURNTRANSFER, true );
+		$site_ID_full = curl_exec ( $cFraxion );
+		curl_close ( $cFraxion );
+		
+		return $site_ID_full;
+	}
+	
 	/**
 	 * A function designed to confirm the site ID with the confirmurl and then
 	 * insert the value into the database.
-	 * The function does not require that
-	 * index.php has been called, so it may be called directly.
-	 * It updates or inserts the id into the options table where the option name is 'fraxion_site_id'.
+	 * The function does not require that index.php has been called,
+	 * so it may be called directly.
+	 * It updates or inserts the id into the options table where the option
+	 * name is 'fraxion_site_id'.
 	 */
 	public static function setSiteID(
 			$confirmurl) {
@@ -298,12 +261,7 @@ class FraxionPayments {
 		$mu_site = false;
 		$blog_id = 0;
 		$table_blog_id = '';
-		// / get site_ID
-		$cFraxion = curl_init ();
-		curl_setopt ( $cFraxion, CURLOPT_URL, $confirmurl );
-		curl_setopt ( $cFraxion, CURLOPT_RETURNTRANSFER, true );
-		$site_ID_full = curl_exec ( $cFraxion );
-		curl_close ( $cFraxion );
+		$site_ID_full = self::sendConfirmSiteURLGetReply ( $confirmurl );
 		if (substr ( $site_ID_full, 0, 2 ) == 'ok') {
 			if (strpos ( $site_ID_full, ',' ) > 0 && strpos ( $site_ID_full, ',0' ) === false) {
 				$mu_site = true;
@@ -333,6 +291,18 @@ class FraxionPayments {
 			$message = $site_ID_full;
 		}
 		return $message;
+	}
+	
+	function enqueFraxionJavascript() {
+		wp_enqueue_script(
+			'fraxion-java-script',
+			$this->urlProvider->getJavaScriptURL(),
+			array( 'jquery' )
+		);
+	}
+	
+	function enqueFraxionStyleSheet() {
+		wp_enqueue_style( 'fraxion-style-sheet', $this->urlProvider->getStyleSheetURL() );
 	}
 } // end class FraxionPayments
 ?>

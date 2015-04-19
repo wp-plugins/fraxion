@@ -1,0 +1,88 @@
+<style>
+    #mbox{background-color:#eee; padding:8px; border:2px outset #666;}
+    #mbm{font-family:sans-serif;font-weight:bold;float:right;padding-bottom:5px;}
+    #ol{background-image: url("{plugins_url}/images/overlay.png");}
+    .mdDialog {display:none; background-color:#FFF;}
+    #fp_post_details { background-color:#FFF;}
+</style>
+<script language="javascript" type="text/javascript">
+    function openPostDetails() {
+        jQuery('#fp_post_details').html('<iframe></iframe>');
+        jQuery('#fp_post_details iframe').attr({
+             'width':'100%'
+            ,'height':'460'
+            ,'src':'{edit_post_info_url}'
+        });
+        initmb();
+        sm('box',700,520);
+    }
+    function postPanelClosed() {
+        /*
+         * "This Post is <strong>{lock_value}</strong>&nbsp;|&nbsp;Price is <strong>{fraxions_cost}</strong> fraxions"
+         */
+        jQuery.ajax({
+              url  : ajaxurl
+            , type : "POST"
+            , data : {action:"refresh_post_panel"
+                ,siteID:"{site_id}"
+                ,postID:"{article_id}"
+                ,userID:"{user_id}"}
+            , success: function(data, textStatus, jqXHR) {
+                    jQuery("#fraxion_details").html(
+                     "This Post is <strong>"+data.locked
+                     +"</strong>&nbsp;|&nbsp;Price is <strong>"+data.cost
+                     +"</strong> fraxions"
+                    );
+                    jQuery("#locked").html(data.locked);
+                    jQuery("#cost").html(data.cost);
+               }
+            , error: function(jqXHR, textStatus, errorThrown) {
+                alert(errorThrown)
+                }
+            }
+        );
+    }
+    function openResUp() {
+        jQuery('#fp_res').html('<iframe></iframe>');
+        jQuery('#fp_res iframe').attr({
+            'width':'80%'
+            ,'height':'400'
+            ,'src':'{site_url}/index.php?frax_upload_resource_form=1&forPostId={article_id}'
+        });
+        initmb();
+        sm('box2',600,520);
+    }
+    function resClosed() {
+        jQuery.post("/index.php?frax_res_list_for_post={article_id}"
+            , function(data) {
+                jQuery("#frax_res_list").html(data);
+            }
+	);
+    }
+</script>
+<div id='sid' style='display:none;'>{site_id}</div>
+<div id='uid_wp' style='display:none;'>{user_id}</div>
+<div id='aid' style='display:none'>{article_id}</div>
+<div id='locked' style='display:none;'>{locked}</div>
+<div id='cost' style='display:none;'>{fraxions_cost}</div>
+<div id="fraxion_details">
+    This Post is <strong>{lock_value}</strong>&nbsp;|&nbsp;
+    Price is <strong>{fraxions_cost}</strong> fraxions
+</div>
+<div id="box" class="mdDialog">
+    <div id="fp_post_details" title="Fraxion Post Details"></div><br />
+    <button onclick="hm('box');postPanelClosed();">&nbsp;Close&nbsp;</button>
+</div>
+
+<a href="#" title="Fraxion Payments Edit Post Details" onclick="openPostDetails()" >Change</a>
+</br><strong>Locked File Attachments</strong>
+
+<a href="#" title="Fraxion Payments New Locked File" onclick="openResUp()">Upload File</a></br></br>
+
+<div id="box2" class="mdDialog">
+    <div id="fp_res" title="Fraxion Upload File"></div><br />
+    <button onclick="hm('box2');resClosed();" >&nbsp;Close&nbsp;</button>
+</div>
+<div id="frax_res_list">
+    {resource_list}
+</div>

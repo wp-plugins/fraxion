@@ -99,5 +99,8 @@ class FraxionLanguageProviderImpl implements FraxionLanguageProvider {
 	public function getViewAccountAlt() {
 		return self::getText ( 'view_account_alt' );
 	}
+	public function getNoServerMessage() {
+		return self::getText ( 'no_server' );
+	}
 }
 ?>

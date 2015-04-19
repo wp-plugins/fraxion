@@ -5,19 +5,17 @@
  */
 class FraxionLoggerImpl {
 	private static $debug = false;
-	private static $log_file_path;
 	private $clientClassName;
+	private $debugThis = false;
 	
 	private function __construct(
 			$clientClassName) {
-		// echo ("clientClassName is ".$clientClassName." debug is ".self::$debug);
 		$this->clientClassName = $clientClassName;
-		
-		if (self::$debug) {
-			if (self::$log_file_path == null) {
-				self::$log_file_path = PluginsPathImpl::get () . "logs" . DIRECTORY_SEPARATOR . "fraxlog.txt";
-			}
-		}
+		$this->debugThis = $this->isDebug();
+	}
+	
+	private function getLogFilePath() {
+		return PluginsPathImpl::get () . "logs" . DIRECTORY_SEPARATOR . "fraxlog" . date ( "Y-m-d" ) . ".txt";
 	}
 	
 	/**
@@ -35,10 +33,10 @@ class FraxionLoggerImpl {
 	 */
 	public function writeLOG(
 			$msg) {
-		if ( self::$debug) {
+		if ( $this->isDebugThis()) {
 			$logOutput = "[" . date ( "Y-m-d H:i:s" ) . "][" . $this->clientClassName . "] ";
 			$logOutput .= $msg . " \n";
-			$fp = fopen ( self::$log_file_path, 'a' );
+			$fp = fopen ( self::getLogFilePath(), 'a' );
 			fwrite ( $fp,  $logOutput  );
 			fclose ( $fp );
 		}
@@ -48,6 +46,18 @@ class FraxionLoggerImpl {
 	 */
 	public static function isDebug() {
 		return self::$debug;
+	}
+	
+	public static function setDebug($newDebug) {
+		self::$debug = $newDebug;
+	}
+	
+	public function isDebugThis() {
+		return $this->debugThis || $this->isDebug();
+	}
+	
+	public function setDebugThis($newDebugFlag) {
+		$this->debugThis = $newDebugFlag;
 	}
 } // end class FraxionLoggerImpl
 ?>

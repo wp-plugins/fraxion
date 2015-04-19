@@ -6,6 +6,14 @@
  * the list of known links used by the plugin.
  */
 interface FraxionURLProvider {
+	public function getBannerURL(
+			$siteId,
+			$siteArticleId,
+			$fut,
+			$returnURL
+	);
+
+	public function getEditPostInfoURL($site_ID, $article_ID, $post_title);
 	
 	/**
 	 * Query FUT and user status only unless siteArticleId given, then also article status, with site identified by fut
@@ -32,6 +40,11 @@ interface FraxionURLProvider {
 	 */
 	public function getCataloguePageUrl();
 	
+	/*
+	 * Get URL for javascript file from the fraxion server.
+	 */
+	public function getJavaScriptURL();
+	
 	/**
 	 * Get URL to the Fraxion login page
 	 */
@@ -43,6 +56,13 @@ interface FraxionURLProvider {
 	 */
 	public function getRegisterAccountPageUrl(
 			$returnURL);
+	
+	public function getRegisterSiteURL();
+	
+	/*
+	 * Get URL for style sheet file from the fraxion server.
+	 */
+	public function getStyleSheetURL();
 	
 	/**
 	 * Get URL to have fraxion send a password reminder
@@ -78,5 +98,22 @@ interface FraxionURLProvider {
 	 */
 	public function getLogoutUrl(
 			$returnURL);
+	
+	/**
+	 * Get URL to fraxion page for administering word press site.
+	 */
+	public function getFraxSiteAdminUrl(
+			$returnURL);
+	
+	/**
+	 * Get URL to determine this site's registration status
+	 */
+	public function getSiteStatusUrl(
+			$siteHomeURL);
+	
+	public function getSiteArticleSettingsUrl($site_ID, $article_ID);
+	
+	public function getPublishArticleDataToFraxionUrl(
+			$site_ID, $article_ID, $post_title, $fraxions_cost, $islocked);
 }
 ?>

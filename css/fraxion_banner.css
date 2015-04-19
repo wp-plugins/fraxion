@@ -1,97 +1,94 @@
-<style type='text/css'>
+/* Basic external banner div - class fraxion_banner */
+div.fraxion_banner * {
+        /* reset values */
+        display:inline;
+        max-width:none;
+        margin: 0;
+        border: 0;
+        outline: 0;
+        font-size: 100%;
+        vertical-align: baseline;
+        background: transparent;
+        clear:none;
+        /* CSS 3.0 */
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+}
+div.fraxion_banner {
+        display:inline;
+        position: relative;
+        max-width: 300px;
+        font-weight:normal;
+        font-family: Georgia serif;
+        color: #336;
+        background: #FcFcFF;
+}
+div.fraxion_banner>div.banner {
+        display:inline;
+        min-height: 64px;
+        background: #FFFFFF;
+        overflow: auto;
+}
+div.fraxion_banner img {
+        display:inline;
+        height:auto;
+        width:auto;
+        float:left;
+        margin-right:10px;
+}
+div.frax_logo, div.buttongrouptitle, div.buttongroup {
+        display:inline;
+}
 
-	/* Basic external banner div - class fraxion_banner */
-	div.fraxion_banner * {
-		/* reset values */
-		display:inline;
-		max-width:none;
-		margin: 0;
-		border: 0;
-		outline: 0;
-		font-size: 100%;
-		vertical-align: baseline;
-		background: transparent;
-		clear:none;
-		/* CSS 3.0 */
-		-moz-box-shadow: none;
-		-webkit-box-shadow: none;
-		box-shadow: none;
-	}
-	div.fraxion_banner {
-		display:inline;
-		position: relative;
-		max-width: 300px;
-		font-weight:normal;
-		font-family: Georgia serif;
-		color: #336;
-		background: #FcFcFF;
-	}
-	div.fraxion_banner>div.banner {
-		display:inline;
-		min-height: 64px;
-		background: #FFFFFF;
-		overflow: auto;
-	}
-	div.fraxion_banner img {
-		display:inline;
-		height:auto;
-		width:auto;
-		float:left;
-		margin-right:10px;
-	}
-	div.frax_logo, div.buttongrouptitle, div.buttongroup {
-		display:inline;
-	}
-	
-	div.fraxion_banner>div.banner>div.buttongroup>div.fxbutton {
-		display:inline-block;
-		background-color: white;
-		margin: 2px 0 2px 0px;
-		vertical-align: baseline; 
-		*vertical-align: middle;
-		*overflow: auto;
-		color: white;
-		cursor: pointer; 
-		-webkit-appearance: button;
-		padding: 0px 4px;
-		-webkit-border-radius: 8px;
-		-khtml-border-radius: 8px;
-		-moz-border-radius: 8px;
-		border-radius:8px;
-		box-shadow: 2px 2px 3px #EEE;
-		-moz-border-radius:8px; /* Old Firefox */
-		-moz-box-shadow: 2px 2px 3px #EEE; /* Old Firefox */
-	}
-	div.fraxion_banner>div.banner>div.buttongroup>div.fxbutton a:link {
-		display:inline;
-		padding: 0 8px 0 8px;
-	}
-	
-	div.fraxion_banner>div.buttongroup>div.fxbutton {
-		display:inline-block;
-		background-color: white;
-		margin: 2px 0 2px 0px;
-		vertical-align: baseline; 
-		*vertical-align: middle;
-		*overflow: auto;
-		color: white;
-		cursor: pointer; 
-		-webkit-appearance: button;
-		padding: 0px 4px;
-		-webkit-border-radius: 8px;
-		-khtml-border-radius: 8px;
-		-moz-border-radius: 8px;
-		border-radius:8px;
-		border-radius:8px;
-		box-shadow: 2px 2px 3px #EEE;
-		-moz-border-radius:8px; /* Old Firefox */
-		-moz-box-shadow: 2px 2px 3px #EEE; /* Old Firefox */
-	}
-	div.fraxion_banner>div.buttongroup>div.fxbutton a:link {
-		display:inline;
-		color: #333366;
-		padding: 0 8px 0 8px;
-		width:auto;
-		float:right;
-	}
-</style>
+div.fraxion_banner>div.banner>div.buttongroup>div.fxbutton {
+        display:inline-block;
+        background-color: white;
+        margin: 2px 0 2px 0px;
+        vertical-align: baseline; 
+        *vertical-align: middle;
+        *overflow: auto;
+        color: white;
+        cursor: pointer; 
+        -webkit-appearance: button;
+        padding: 0px 4px;
+        -webkit-border-radius: 8px;
+        -khtml-border-radius: 8px;
+        -moz-border-radius: 8px;
+        border-radius:8px;
+        box-shadow: 2px 2px 3px #EEE;
+        -moz-border-radius:8px; /* Old Firefox */
+        -moz-box-shadow: 2px 2px 3px #EEE; /* Old Firefox */
+}
+div.fraxion_banner>div.banner>div.buttongroup>div.fxbutton a:link {
+        display:inline;
+        padding: 0 8px 0 8px;
+}
+
+div.fraxion_banner>div.buttongroup>div.fxbutton {
+        display:inline-block;
+        background-color: white;
+        margin: 2px 0 2px 0px;
+        vertical-align: baseline; 
+        *vertical-align: middle;
+        *overflow: auto;
+        color: white;
+        cursor: pointer; 
+        -webkit-appearance: button;
+        padding: 0px 4px;
+        -webkit-border-radius: 8px;
+        -khtml-border-radius: 8px;
+        -moz-border-radius: 8px;
+        border-radius:8px;
+        border-radius:8px;
+        box-shadow: 2px 2px 3px #EEE;
+        -moz-border-radius:8px; /* Old Firefox */
+        -moz-box-shadow: 2px 2px 3px #EEE; /* Old Firefox */
+}
+div.fraxion_banner>div.buttongroup>div.fxbutton a:link {
+        display:inline;
+        color: #333366;
+        padding: 0 8px 0 8px;
+        width:auto;
+        float:right;
+}

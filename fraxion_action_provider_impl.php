@@ -9,7 +9,7 @@ class FraxionActionProviderImpl implements FraxionActionProvider {
 	private $fraxion_actions = null;
 	private $urlProvider = null;
 	private $languageProvider = null;
-	
+	private $debugActionLoad = false;
 	/**
 	 * Class constructor sets up basic variables.
 	 * @param FraxionURLProvider $fraxURLProvider
@@ -43,7 +43,7 @@ class FraxionActionProviderImpl implements FraxionActionProvider {
 			$filepath = PluginsPathImpl::get () . 'javascript' . DIRECTORY_SEPARATOR . 'settings_actions.json';
 			$resources = json_decode ( str_replace ( '\n', null, file_get_contents ( $filepath ) ), TRUE );
 			$this->fraxion_actions = $resources ['actions'];
-			if ($this->logger->isDebug ()) {
+			if ($debugActionLoad && $this->logger->isDebug ()) {
 				$this->logger->writeLOG ( "loaded actions from " . $filepath . " found:" );
 				foreach ( $this->fraxion_actions as $i => $value ) {
 					$this->logger->writeLOG ( $i . ":" . $this->fraxion_actions [$i] );

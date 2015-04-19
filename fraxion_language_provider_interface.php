@@ -27,5 +27,6 @@ interface FraxionLanguageProvider {
 	public function getLogoutFPAlt();
 	public function getViewAccountLabel();
 	public function getViewAccountAlt();
+	public function getNoServerMessage();
 }
 ?>

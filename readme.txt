@@ -2,14 +2,14 @@
 Contributors:  GarryCL, DanDare2050, Chris Wilkins
 Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news, newspaper, digital news, books, short stories, online articles
 Requires at least: 3.0.0
-Tested up to: 3.6.0
-Stable tag: 2.0.0
+Tested up to: 3.5.1
+Stable tag: 2.1.0
 
-"Micropayments for bloggers". Sell articles, short stories and attached files for as little as 1c. You set the price. Readers "unlock" with 1 click.
+"Micropayments for bloggers". Sell articles, short stories for as little as 1c. You set the price. Readers "unlock" with 1 click.
 
 == Description ==
 
-This simple plug-in immediately makes "micropayments for content" a reality. Set up is simple, and with only a few steps you can lock your articles and stories. You set your own prices for your content, as little as 1c.
+This simple plug-in immediately makes "micropayments for bloggers" a reality. Set up is simple, and with only a few steps you can lock your articles and stories. You set your own prices for your content, as little as 1c.
 
 Readers can unlock these articles with one-click, exchanging a small number of cents for quality content.
 
@@ -19,8 +19,6 @@ Locked articles can also appear in the Fraxion Payments catalogue with new featu
 
 A great plug-in for journalists, bloggers and writers who want to turn their creativity into an income.
 
-Version 2 makes it easy to also sell videos, music and pdfs.
-
 
 == Installation ==
 
@@ -29,7 +27,7 @@ Version 2 makes it easy to also sell videos, music and pdfs.
 3. Activate the plugin through the 'Plugins' menu in WordPress
 4. Go to "settings" and then "Fraxion" to register you site.
 
-For help on how to use go to http://www.fraxionpayments.com/creators/
+For video on how to use go to http://www.fraxionpayments.com/writers/
 
 == Frequently Asked Questions ==
 
@@ -59,8 +57,16 @@ It can only help. With 31,000 journalist laid off in the USA alone over the last
 
 == Changelog ==
 
+= 2.1.0 =
+Article banner is now rendered by the fraxion payments server instead of the plugin.
+This allows rapid release of new functionality without needing to load a new plugin version.
+
+= 2.0.1 =
+Fixes an uploader bug for sites not at the root of their domain.
+Allows a link to a locked article to request to only get the snippet and never the full version.
+
 = 2.0.0 =
-New function: locked attachments. Allows files to be attached to an article. PDF, mp3, mp4, txt, jpg anything. There are two versions uploaded for each file, a snippet and a full version. When selecting the link the full version is provided only if you are logged in and have unlocked the associated article. Otherwise the snippet is delivered.
+New function: locked resources. Allows files to be attached to an article. PDF, mp3, mp4, txt, jpg anything. There are two forms for each file, a snippet and a full version. When selecting the link the full version is provided only if you are logged in and have unlocked the associated article. Otherwise the snippet is delivered.
 There are also significant changes to the layout of the banners in articles.
 
 = 1.3.8 =
@@ -171,8 +177,17 @@ The first release. We think most bugs have been solved. But of course please let
 
 == Upgrade Notice ==
 
+= 2.1.0 =
+Article banner is now rendered by the fraxion payments server instead of the plugin.
+This allows rapid release of new functionality without needing to load a new plugin version.
+This is an essential release for all users of Fraxion Payments.
+
+= 2.0.1 =
+Fices an uploader bug for sites not at the root of their domain.
+Allows a link to a locked article to request to only get the snippet and never the full version.
+
 = 2.0.0 =
-Important New function: locked attachments. Allows files to be attached to an article. PDF, mp3, mp4, txt, jpg anything. There are two versions uploaded for each file, a snippet and a full version. When selecting the link the full version is provided only if you are logged in and have unlocked the associated article. Otherwise the snippet is delivered.
+New function: locked resources. Allows files to be attached to an article. PDF, mp3, mp4, txt, jpg anything. There are two forms for each file, a snippet and a full version. When selecting the link the full version is provided only if you are logged in and have unlocked the associated article. Otherwise the snippet is delivered.
 There are also significant changes to the layout of the banners in articles.
 
 = 1.3.8 =

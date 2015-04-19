@@ -8,12 +8,13 @@ Plugin Name: Fraxion Payments
 Plugin URI: http://www.fraxionpayments.com/
 Description: This plugin manages document locking.
 Author: Fraxion Payments
-Version: 2.0.0
+Version: 2.1.0
 Author URI: http://www.fraxionpayments.com/
 */
 
 include("plugins_path_impl.php");
 include("fraxion_logger_impl.php");
+include("fraxion_log_util.php");
 include("fraxion_error_page_impl.php");
 
 // include("fraxion_url_sender_mock.php");
@@ -44,28 +45,39 @@ $resourceService = new FraxionResourceServiceImpl();
 include("fraxion_resource_controller.php");
 $resourceController = new FraxionResourceController($articleLogic, $resourceService);
 
-include("fraxion_banner_writer_impl.php");
-$bannerWriter = new FraxionBannerWriterImpl($fraxURLProvider, $fraxLanguageProvider, $fraxActionProvider);
+//include("fraxion_banner_writer_impl.php");
+//$bannerWriter = new FraxionBannerWriterImpl($fraxURLProvider, $fraxLanguageProvider, $fraxActionProvider);
+include("FUTServiceImpl.php");
+$FUTService = new FUTServiceImpl($fraxService, $fraxURLProvider);
 
 include("fraxion_old_class.php");
-$fraxold = new FraxionPaymentsOld($resourceController);
+$fraxold = new FraxionPaymentsOld($resourceController, $fraxURLProvider, $fraxService);
 
 include("fraxion_class.php");
-$frax = new FraxionPayments($fraxService, $bannerWriter, $fraxURLProvider, $fraxold);
+$frax = new FraxionPayments($fraxService, $fraxURLProvider, $fraxLanguageProvider, $FUTService);
+
+include("fraxion_admin_article_display.php");
+$adminArticleDisplay = new FraxionAdminArticleDisplay($resourceController, $fraxURLProvider, $fraxService);
+
+include("fraxion_admin_post_panel.php");
+$adminPostPanel = new FraxionAdminPostPanel($fraxURLProvider, $fraxService);
 
 
-add_action('init', array($frax,'checkFUT'));
-add_action('admin_head', array($fraxold,'admin_js'));
+add_action('init', array($FUTService,'checkFUT'));
+add_action('init', array($frax,'enqueFraxionJavascript'));
+add_action('init', array($frax,'enqueFraxionStyleSheet'));
+add_action('admin_head', array($fraxold,'admin_js')); // includes admin javascript in admin page head
 add_action('admin_head', array($fraxold,'admin_TagButton'));
-add_action('admin_menu', array($fraxold,'admin_Post'));
+add_action('admin_menu', array($adminArticleDisplay,'admin_Post'));
 add_action('admin_menu', array($fraxold,'admin_Menu'));
 add_action('publish_post', array($fraxold,'admin_PostSave'));
-add_action('wp_head', array($frax,'fraxion_js'));
-add_action('wp_head', array($frax,'fraxion_css'));
+add_action('wp_head', array($frax,'fraxion_js')); // should be admin only java script using enque and requesting JQuery
 add_filter('the_content', 'do_shortcode',1);
 add_filter('the_content', array($frax,'push_banner'),10,1);
 add_filter('the_excerpt', array($frax,'push_banner'),10,1);
-add_action('wp_footer',  array($frax,'fraxion_respond'));
+add_filter('comments_open', array($frax,'is_show_comments'),11,2);
+add_filter('the_content', array($frax,'insert_enter_comments_footnote'),11);
+add_action('wp_ajax_refresh_post_panel', array($adminPostPanel,'refresh_post_panel'));
 
 add_filter('query_vars', array($resourceController,'my_plugin_query_vars'));
 add_action('parse_request', array($resourceController,'doFraxResourceRequest'));
