@@ -26,7 +26,6 @@ class FUTServiceImpl {
 			FraxionService $fraxionService, 
 			FraxionURLProvider $urlProvider) {
 		$this->logger = FraxionLoggerImpl::getLogger ( "FUTServiceImpl" );
-		$this->logger->setDebugThis(true);
 		if ($this->logger->isDebugThis()) {
 			$this->logger->writeLOG( '[__construct]');
 		}

@@ -3,7 +3,7 @@ Contributors:  GarryCL, DanDare2050, Chris Wilkins
 Tags: micropayments, online journalism, citizen journalism, paid content, bloggers, blogging, blog, online magazine, ezine, news, newspaper, digital news, books, short stories, online articles
 Requires at least: 3.0.0
 Tested up to: 3.5.1
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 
 "Micropayments for bloggers". Sell articles, short stories for as little as 1c. You set the price. Readers "unlock" with 1 click.
 
@@ -57,9 +57,13 @@ It can only help. With 31,000 journalist laid off in the USA alone over the last
 
 == Changelog ==
 
+= 2.1.1 =
+Fixed a logging error.
+
 = 2.1.0 =
 Article banner is now rendered by the fraxion payments server instead of the plugin.
 This allows rapid release of new functionality without needing to load a new plugin version.
+Has logging error fixed by 2.1.1
 
 = 2.0.1 =
 Fixes an uploader bug for sites not at the root of their domain.
@@ -177,10 +181,14 @@ The first release. We think most bugs have been solved. But of course please let
 
 == Upgrade Notice ==
 
+= 2.1.1 =
+Fixed a logging error.
+
 = 2.1.0 =
 Article banner is now rendered by the fraxion payments server instead of the plugin.
 This allows rapid release of new functionality without needing to load a new plugin version.
 This is an essential release for all users of Fraxion Payments.
+Has logging error fixed by 2.1.1
 
 = 2.0.1 =
 Fices an uploader bug for sites not at the root of their domain.

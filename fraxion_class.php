@@ -12,7 +12,7 @@ class FraxionPayments {
 	private $const_option_fraxion_site_id = 'fraxion_site_id'; // The database option name for the saved Site Id given at
 	                                                           // registration.
 //	private $const_option_fraxion_resf_id = 'fraxion_resf_id'; // postfix for resource folder
-	private static $const_version = '2.1.0';
+	private static $const_version = '2.1.1';
 	private $fraxion_site_id; // Id given to this site when registered with Fraxion.
 	
 	public static function getVersion() {
